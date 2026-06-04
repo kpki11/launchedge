@@ -1,0 +1,207 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us &ndash; LaunchEdge</title>
+  <meta name="description" content="LaunchEdge — the operating system for modern Indian businesses. Built for Bharat, by Bharat.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Sora:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/tokens.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/nav.css">
+  <link rel="stylesheet" href="../css/footer.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <style>
+    .about-hero {
+      padding: 160px 56px 80px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .about-eyebrow { font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+    .about-eyebrow::before { content: ''; display: inline-block; width: 28px; height: 1px; background: var(--gold); }
+    .about-hero h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(3.2rem, 5.5vw, 6rem); font-weight: 400; color: var(--ink); letter-spacing: -0.03em; line-height: 1.05; max-width: 820px; margin-bottom: 40px; }
+    .about-hero h1 em { font-style: italic; color: var(--gold); }
+    .about-lead { font-size: 1.05rem; color: var(--text-dim); line-height: 1.75; max-width: 600px; margin-bottom: 64px; }
+    .about-divider { border: none; border-top: 1px solid var(--gold-border); margin: 0 56px 80px; }
+    .about-story { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; padding: 0 56px 100px; max-width: 1200px; margin: 0 auto; }
+    .about-story-text h2 { font-family: 'Cormorant Garamond', serif; font-size: 2.4rem; font-weight: 400; color: var(--ink); letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 28px; }
+    .about-story-text p { font-size: 0.9rem; color: var(--text-dim); line-height: 1.8; margin-bottom: 18px; }
+    .about-values { background: var(--beige); padding: 100px 56px; }
+    .about-values-inner { max-width: 1200px; margin: 0 auto; }
+    .about-values h2 { font-family: 'Cormorant Garamond', serif; font-size: 2.4rem; font-weight: 400; color: var(--ink); letter-spacing: -0.02em; margin-bottom: 56px; text-align: center; }
+    .values-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+    .value-card { background: var(--ivory); border: 1px solid var(--gold-border); border-radius: 14px; padding: 32px 28px; }
+    .value-icon { font-size: 1.6rem; margin-bottom: 18px; }
+    .value-card h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 500; color: var(--ink); margin-bottom: 10px; }
+    .value-card p { font-size: 0.84rem; color: var(--text-dim); line-height: 1.7; }
+    .about-cta-section { padding: 100px 56px; text-align: center; }
+    .about-cta-section h2 { font-family: 'Cormorant Garamond', serif; font-size: 2.8rem; font-weight: 400; color: var(--ink); letter-spacing: -0.02em; margin-bottom: 16px; }
+    .about-cta-section p { font-size: 0.9rem; color: var(--text-dim); margin-bottom: 36px; }
+    .about-cta-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .registered-note { font-size: 0.76rem; color: var(--text-faint); margin-top: 28px; }
+    @media (max-width: 900px) {
+      .about-hero { padding: 140px 24px 60px; }
+      .about-story { grid-template-columns: 1fr; gap: 40px; padding: 0 24px 80px; }
+      .about-divider { margin: 0 24px 60px; }
+      .about-values { padding: 80px 24px; }
+      .values-grid { grid-template-columns: 1fr; }
+      .about-cta-section { padding: 80px 24px; }
+    }
+  </style>
+<link rel="stylesheet" href="../css/mobile.css">
+</head>
+<body>
+
+  <div id="cursor"></div>
+  <div id="cursor-ring"></div>
+
+  <nav id="nav">
+    <a href="../index.html" class="logo">
+      <img class="logo-mark" src="../assets/images/logo.png" alt="LaunchEdge">
+      LaunchEdge
+    </a>
+    <div class="nav-links">
+      <a href="../index.html">Home</a>
+      <a href="labs.html">Labs</a>
+      <a href="copilot.html">CoPilot</a>
+      <a href="talent.html">Talent</a>
+      <a href="about.html" style="color: var(--ink);">About</a>
+    </div>
+    <a href="contact.html" class="nav-cta">Contact Us</a>
+  
+  <button class="hamburger" id="hamburger" aria-label="Menu" onclick="toggleDrawer()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile Drawer -->
+<div class="mobile-drawer" id="mobileDrawer">
+  <a href="../index.html">Home</a>
+  <a href="labs.html">Labs</a>
+  <a href="talent.html">Talent</a>
+  <a href="copilot.html">CoPilot</a>
+  <a href="about.html">About Us</a>
+  <a href="contact.html">Contact</a>
+  <a href="privacy.html">Privacy</a>
+  <a href="terms.html">Terms</a>
+</div>
+
+  <section class="about-hero">
+    <div class="about-eyebrow">Our Story</div>
+    <h1>Built for Bharat.<br><em>By Bharat.</em></h1>
+    <p class="about-lead">LaunchEdge is the operating system for modern Indian businesses — a single intelligent platform where you can design, automate, hire and grow, all in one place.</p>
+  </section>
+
+  <hr class="about-divider">
+
+  <section class="about-story">
+    <div class="about-story-text">
+      <h2>Why we built this</h2>
+      <p>India has millions of small businesses, startups, and entrepreneurs who are building something real. But the tools they use are either too expensive, too complex, or not built for the way Indian businesses actually work.</p>
+      <p>We built LaunchEdge to change that. A platform that understands GST, UPI, local workflows, and the unique challenges of building a business in India — without costing a fortune.</p>
+      <p>We registered the business in 2026 and shipped the first version within months. We are early, we are honest about it, and we are building fast.</p>
+    </div>
+    <div class="about-story-text">
+      <h2>Where we are going</h2>
+      <p>LaunchEdge is currently in Version 1 — with the core Labs app available as a direct download, CoPilot and Talent on the way, and a growing ecosystem of tools designed around Indian business needs.</p>
+      <p>Our roadmap includes a full Play Store release, deeper AI capabilities through CoPilot, a talent marketplace connecting MSMEs with professionals across India, and much more.</p>
+      <p>We are building in public, listening to feedback, and improving every week. If you have an idea or want to collaborate, we would love to hear from you.</p>
+    </div>
+  </section>
+
+  <section class="about-values">
+    <div class="about-values-inner">
+      <h2>What we stand for</h2>
+      <div class="values-grid">
+        <div class="value-card">
+          <div class="value-icon">₹</div>
+          <h3>Affordable by Design</h3>
+          <p>Powerful tools should not require a big-company budget. We price for Indian businesses, not Fortune 500 companies.</p>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">◉</div>
+          <h3>India-First</h3>
+          <p>GST-ready, UPI-friendly, Hindi-supported, and built around the workflows that Indian businesses actually use every day.</p>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">⬡</div>
+          <h3>Honest &amp; Transparent</h3>
+          <p>We are an early-stage company. We tell you what works, what is coming, and what we are still building. No false promises.</p>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">⊛</div>
+          <h3>Your Data, Your Business</h3>
+          <p>We do not sell your data. We do not share it with advertisers. Bank-grade principles applied to your business information.</p>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">⬤</div>
+          <h3>Community Driven</h3>
+          <p>Built with feedback from real businesses. Every feature we ship is shaped by what Indian entrepreneurs actually need.</p>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">✦</div>
+          <h3>AI with Purpose</h3>
+          <p>Our AI features are designed to help you make better decisions, not just to look impressive. Practical intelligence for real work.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="about-cta-section">
+    <h2>Let's build together</h2>
+    <p>Whether you are an early user, a potential partner, or just curious — we would love to connect.</p>
+    <div class="about-cta-btns">
+      <a href="contact.html" class="btn-primary">Get in Touch &rarr;</a>
+      <a href="labs.html" class="btn-ghost">&#9654; Try LaunchEdge Labs</a>
+    </div>
+    <p class="registered-note">LaunchEdge &mdash; Registered in India, 2026 &mdash; Made with &#10084; in Bharat</p>
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a href="../index.html" class="logo">
+          <img class="logo-mark" src="../assets/images/logo.png" alt="LaunchEdge">
+          LaunchEdge
+        </a>
+        <p>The operating system for modern Indian businesses.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Products</h5>
+        <a href="labs.html">LaunchEdge Labs</a>
+        <a href="copilot.html">LaunchEdge CoPilot</a>
+        <a href="talent.html">LaunchEdge Talent</a>
+      </div>
+      <div class="footer-col">
+        <h5>Company</h5>
+        <a href="about.html">About Us</a>
+        <a href="contact.html">Contact</a>
+        <a href="#" style="opacity:0.4;pointer-events:none;" title="Coming Soon">Careers <span style="font-size:0.65rem;color:var(--gold)">(Soon)</span></a>
+      </div>
+      <div class="footer-col">
+        <h5>Legal</h5>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms of Service</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 LaunchEdge. All rights reserved. &mdash; Made with &#10084; in India.</p>
+    </div>
+  </footer>
+
+  <script src="../js/cursor.js"></script>
+  <script src="../js/scroll.js"></script>
+  <script src="../js/particles.js"></script>
+  <!-- GoatCounter Analytics — privacy-friendly visitor tracking (no cookies) -->
+  <!-- Sign up at goatcounter.com and replace "launchedge" with your site code -->
+  <script data-goatcounter="https://launchedge.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+  <script>
+  function toggleDrawer(){var d=document.getElementById('mobileDrawer'),b=document.getElementById('hamburger');if(d.classList.contains('open')){d.classList.remove('open');b.classList.remove('open');document.body.style.overflow='';}else{d.classList.add('open');b.classList.add('open');document.body.style.overflow='hidden';}}
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'){var d=document.getElementById('mobileDrawer'),b=document.getElementById('hamburger');if(d){d.classList.remove('open');}if(b){b.classList.remove('open');}document.body.style.overflow='';}});
+  </script>
+</body>
+</html>
+
+

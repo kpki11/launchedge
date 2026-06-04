@@ -1,0 +1,945 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LaunchEdge &ndash; The OS for Modern Indian Business</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Sora:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/animations.css">
+<link rel="stylesheet" href="css/nav.css">
+<link rel="stylesheet" href="css/footer.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/home.css">
+<link rel="stylesheet" href="css/mobile.css">
+<style>
+/* â”€â”€ Hindi accent words â”€â”€ */
+.hindi-accent {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  color: var(--gold);
+  opacity: 0.82;
+  font-size: 0.92em;
+  letter-spacing: 0.04em;
+}
+
+/* â”€â”€ Stats bar icons â”€â”€ */
+.stat-icon {
+  display: block;
+  margin: 0 auto 10px;
+  opacity: 0.7;
+  color: var(--gold);
+}
+
+/* â”€â”€ Platform section decoration â”€â”€ */
+#platform { position: relative; overflow: hidden; padding: 100px 56px 60px; }
+.platform-deco-ring {
+  position: absolute;
+  right: -120px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 480px;
+  height: 480px;
+  border-radius: 50%;
+  border: 1px solid rgba(196,150,58,0.12);
+  pointer-events: none;
+  z-index: 0;
+}
+.platform-deco-ring::before {
+  content: '';
+  position: absolute;
+  inset: 32px;
+  border-radius: 50%;
+  border: 1px solid rgba(196,150,58,0.08);
+}
+.platform-deco-ring::after {
+  content: '';
+  position: absolute;
+  inset: 80px;
+  border-radius: 50%;
+  border: 1px solid rgba(196,150,58,0.06);
+}
+/* Subtle grid behind platform */
+.platform-grid-bg {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(196,150,58,0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(196,150,58,0.07) 1px, transparent 1px);
+  background-size: 56px 56px;
+  pointer-events: none;
+  z-index: 0;
+}
+/* Radial gold glow behind platform grid */
+.platform-glow {
+  position: absolute;
+  left: -80px;
+  bottom: -80px;
+  width: 480px;
+  height: 480px;
+  border-radius: 50%;
+  background: radial-gradient(circle at center, rgba(196,150,58,0.07) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+#platform > *:not(.platform-deco-ring):not(.platform-grid-bg):not(.platform-glow):not(.platform-bg-img) {
+  position: relative;
+  z-index: 1;
+}
+
+/* â”€â”€ Bharat section â”€â”€ */
+#bharat { position: relative; overflow: hidden; padding-top: 80px; }
+.bharat-mandala {
+  position: absolute;
+  right: -60px;
+  bottom: -60px;
+  width: 340px;
+  height: 340px;
+  opacity: 0.06;
+  pointer-events: none;
+  z-index: 0;
+}
+/* Monument silhouette layer for Bharat section */
+.bharat-monument-bg {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 55%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center left;
+  opacity: 0.22;
+  pointer-events: none;
+  z-index: 0;
+  filter: sepia(0.4) saturate(0.5);
+}
+#bharat > *:not(.bharat-mandala):not(.bharat-monument-bg):not(.bharat-bg-arch) {
+  position: relative;
+  z-index: 1;
+}
+/* Hindi sub-tagline */
+.bharat-hindi-line {
+  display: block;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 1.15rem;
+  color: var(--gold);
+  opacity: 0.65;
+  margin-top: 10px;
+  letter-spacing: 0.06em;
+}
+
+/* â”€â”€ How it Works section â”€â”€ */
+#how { position: relative; overflow: hidden; text-align: center; }
+.how-deco-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(196,150,58,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(196,150,58,0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+  z-index: 0;
+}
+/* Dark bg image at very low opacity for How section */
+.how-bg-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 55%;
+  opacity: 0.18;
+  pointer-events: none;
+  z-index: 0;
+}
+.how-bg-fade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, var(--ivory) 0%, rgba(250,247,242,0.5) 35%, rgba(250,247,242,0.5) 65%, var(--ivory) 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+#how > *:not(.how-deco-grid):not(.how-bg-img):not(.how-bg-fade):not(.how-bg-arch) {
+  position: relative;
+  z-index: 1;
+}
+
+.how-bg-arch {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 340px;
+  height: auto;
+  opacity: 0.045;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Platform dark bg image */
+.platform-bg-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0.04;
+  pointer-events: none;
+  z-index: 0;
+  filter: grayscale(1);
+}
+
+/* Steps connector line */
+.steps-row { position: relative; }
+.steps-row::before {
+  content: '';
+  position: absolute;
+  top: 27px;
+  left: calc(16.66% + 20px);
+  right: calc(16.66% + 20px);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(196,150,58,0.5), rgba(196,150,58,0.5), transparent);
+  z-index: 0;
+}
+/* step hover */
+.step { transition: transform 0.3s; }
+.step:hover { transform: translateY(-6px); }
+
+/* â”€â”€ CTA Strip â”€â”€ */
+#cta-strip {
+  background: linear-gradient(110deg, #0c0c0a 0%, #1a1508 50%, #0c0c0a 100%);
+  border-top: 1px solid rgba(196,150,58,0.15);
+  border-bottom: 1px solid rgba(196,150,58,0.15);
+  padding: 80px 64px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+#cta-strip::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(ellipse 60% 40% at 50% 50%, rgba(196,150,58,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+.cta-strip-inner { position: relative; z-index: 1; }
+.cta-particles-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0.22;
+  pointer-events: none;
+  z-index: 0;
+  mix-blend-mode: screen;
+}
+.cta-strip-eyebrow {
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 20px;
+}
+.cta-strip-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 400;
+  color: #f5f0e8;
+  line-height: 1.2;
+  margin-bottom: 12px;
+}
+.cta-strip-sub {
+  color: rgba(245,240,232,0.55);
+  font-size: 0.95rem;
+  margin-bottom: 36px;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.cta-strip-actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* â”€â”€ Footer deco â”€â”€ */
+footer { position: relative; }
+.footer-top-deco {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0.3;
+}
+
+/* pcard hover border glow */
+.pcard { transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s; }
+.pcard:hover { border-color: rgba(196,150,58,0.4); transform: translateY(-4px); }
+</style>
+  <style id="feedback-styles">
+    #feedback-strip {
+      background: var(--beige);
+      padding: 100px 56px;
+      border-top: 1px solid var(--gold-border);
+    }
+    .feedback-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .feedback-left h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      font-weight: 400;
+      color: var(--ink);
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 14px;
+    }
+    .feedback-left h2 em { font-style: italic; color: var(--gold); }
+    .feedback-left p { font-size: 0.88rem; color: var(--text-dim); line-height: 1.7; }
+    .feedback-form { display: flex; flex-direction: column; gap: 12px; }
+    .feedback-form input[type="email"],
+    .feedback-form textarea {
+      width: 100%;
+      background: var(--ivory);
+      border: 1px solid var(--gold-border);
+      border-radius: 9px;
+      padding: 13px 16px;
+      font-family: 'Sora', sans-serif;
+      font-size: 0.84rem;
+      color: var(--ink);
+      outline: none;
+      transition: border-color 0.2s;
+      resize: none;
+    }
+    .feedback-form input:focus, .feedback-form textarea:focus { border-color: var(--gold); }
+    .feedback-form input::placeholder, .feedback-form textarea::placeholder { color: var(--text-faint); }
+    .feedback-submit {
+      background: var(--ink);
+      color: var(--ivory);
+      border: none;
+      border-radius: 9px;
+      padding: 14px 28px;
+      font-family: 'Sora', sans-serif;
+      font-size: 0.84rem;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: all 0.25s;
+      align-self: flex-start;
+    }
+    .feedback-submit:hover { background: var(--ink2); transform: translateY(-2px); box-shadow: 0 10px 28px rgba(0,0,0,0.14); }
+    .feedback-note { font-size: 0.72rem; color: var(--text-faint); }
+    .feedback-success { text-align: center; padding: 20px 0; }
+    .feedback-success h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 400; color: var(--ink); margin-bottom: 8px; }
+    .feedback-success p { font-size: 0.86rem; color: var(--text-dim); }
+    @media (max-width: 900px) {
+      #feedback-strip { padding: 80px 24px; }
+      .feedback-inner { grid-template-columns: 1fr; gap: 40px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Custom Cursor -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- Global Floating Particles -->
+<canvas id="particle-canvas"></canvas>
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     NAVIGATION
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<nav id="nav">
+  <a href="index.html" class="logo">
+    <img class="logo-mark" src="assets/images/logo.png" alt="LaunchEdge">
+    LaunchEdge
+  </a>
+  <div class="nav-links">
+    <a href="#">Products &darr;</a>
+    <a href="#" style="opacity:0.45;pointer-events:none;cursor:not-allowed;" title="Coming Soon">Resources <span style="font-size:0.62rem;opacity:0.7">(Soon)</span></a>
+    <a href="pages/about.html">About Us</a>
+    <a href="#" style="opacity:0.45;pointer-events:none;cursor:not-allowed;" title="Coming Soon">Pricing <span style="font-size:0.62rem;opacity:0.7">(Soon)</span></a>
+  </div>
+  <a href="pages/copilot.html" class="nav-cta">Get Started &rarr;</a>
+
+  <button class="hamburger" id="hamburger" aria-label="Menu" onclick="toggleDrawer()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile Drawer -->
+<div class="mobile-drawer" id="mobileDrawer">
+  <a href="index.html">Home</a>
+  <a href="pages/labs.html">Labs</a>
+  <a href="pages/talent.html">Talent</a>
+  <a href="pages/copilot.html">CoPilot</a>
+  <a href="pages/about.html">About Us</a>
+  <a href="pages/contact.html">Contact</a>
+  <a href="#" class="soon">Resources</a>
+  <a href="#" class="soon">Pricing</a>
+  <a href="pages/copilot.html" class="md-cta">Get Started →</a>
+</div>
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     HERO SECTION
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<section id="hero">
+
+  <!-- Layer 1: Base background image â€” full cinematic scene -->
+  <img class="hero-bg-img"
+       src="assets/images/home/launchedge_home_bg.png"
+       alt="">
+
+  <!-- Layer 2: Orbital rings â€” revolves around the planet/orb -->
+  <div class="hero-rings-wrap">
+    <img class="hero-rings-anim"
+         src="assets/images/home/launchedge_home_orbital_rings_alt.png"
+         alt="">
+  </div>
+
+  <!-- Layer 3: Particles overlay -->
+  <img class="hero-figure"
+       src="assets/images/home/launchedge_home_particles_overlay.png"
+       alt="">
+
+  <!-- Gradient scrim for left-side text legibility -->
+  <div class="hero-scrim"></div>
+
+  <!-- LEFT â€” Headline and CTAs -->
+  <div class="hero-left">
+    <div class="hero-eyebrow">
+      <span class="hero-eyebrow-line"></span>
+      भारत का बिज़नेस OS
+    </div>
+    <h1 class="hero-headline">
+      Every Idea.<br>
+      Every System.<br>
+      <span class="gold">Every Growth.</span>
+    </h1>
+    <p class="hero-sub">
+      From your first idea to a full-scale enterprise,
+      LaunchEdge handles everything in one intelligent platform.
+      Built in India, built for India.
+    </p>
+    <div class="hero-actions">
+      <a href="pages/copilot.html" class="btn-primary">Explore LaunchEdge &rarr;</a>
+      <button class="btn-ghost">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="flex-shrink:0">
+          <path d="M3 2L11 7L3 12V2Z" fill="currentColor"/>
+        </svg>
+        Watch Overview
+      </button>
+    </div>
+    <div class="hero-trust trust-strip dark">
+      <div class="trust-avatars">
+        <span></span>
+        <span style="background:linear-gradient(135deg,#d4b896,#a67850)"></span>
+        <span style="background:linear-gradient(135deg,#c4963a,#8a6020)"></span>
+      </div>
+      <div class="trust-text">
+        <strong>Trusted by 10K+ businesses</strong><br>across every corner of India.
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT â€” Product cards -->
+  <div class="hero-cards">
+
+    <a href="pages/labs.html" class="hero-card">
+      <div class="hcard-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/>
+        </svg>
+      </div>
+      <div class="hcard-text">
+        <h4>LaunchEdge Labs</h4>
+        <p>Visual ERP. Build any business system, no code.</p>
+      </div>
+      <span class="hcard-arrow">&rarr;</span>
+    </a>
+
+    <a href="pages/copilot.html" class="hero-card">
+      <div class="hcard-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+      </div>
+      <div class="hcard-text">
+        <h4>LaunchEdge CoPilot</h4>
+        <p>AI buddy that guides your every business decision.</p>
+      </div>
+      <span class="hcard-arrow">&rarr;</span>
+    </a>
+
+    <a href="pages/talent.html" class="hero-card">
+      <div class="hcard-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          <path d="M21 21v-2a4 4 0 0 0-3-3.85"/>
+        </svg>
+      </div>
+      <div class="hcard-text">
+        <h4>LaunchEdge Talent</h4>
+        <p>Find verified talent across India. Build together.</p>
+      </div>
+      <span class="hcard-arrow">&rarr;</span>
+    </a>
+
+  </div>
+
+  <!-- Scroll hint -->
+  <div class="scroll-hint">
+    <div class="scroll-dot"></div>
+    <span>Scroll to explore</span>
+  </div>
+
+</section>
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     STATS BAR
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<div id="stats">
+  <div class="stat-item">
+    <svg class="stat-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+    </svg>
+    <div class="stat-num" data-target="10000" data-suffix="+">10K+</div>
+    <div class="stat-label">Businesses</div>
+  </div>
+  <div class="stat-item">
+    <svg class="stat-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+    </svg>
+    <div class="stat-num" data-target="25" data-suffix="+">25+</div>
+    <div class="stat-label">Tools</div>
+  </div>
+  <div class="stat-item">
+    <svg class="stat-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+    </svg>
+    <div class="stat-num" data-target="100" data-suffix="+">100+</div>
+    <div class="stat-label">Templates</div>
+  </div>
+  <div class="stat-item">
+    <svg class="stat-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/>
+    </svg>
+    <div class="stat-num" style="font-style:italic">Endless</div>
+    <div class="stat-label">Possibilities</div>
+  </div>
+</div>
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     PLATFORM / FEATURES
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<section id="platform">
+  <img class="platform-bg-img" src="assets/images/home/launchedge_home_bg_dark.png" alt="" aria-hidden="true">
+  <div class="platform-grid-bg"></div>
+  <div class="platform-deco-ring"></div>
+  <div class="platform-glow"></div>
+
+  <div class="platform-left">
+    <div class="eyebrow">All in One Platform</div>
+    <h2 class="section-title">Everything you need,<br>all in <span class="accent">one system.</span></h2>
+    <p class="section-desc">
+      From day one operations to scaling across India,
+      LaunchEdge gives you the tools, the automation,
+      and the intelligence to do it all without juggling five different apps.
+    </p>
+    <p class="section-desc" style="margin-top:14px; font-style:italic; color:var(--gold); opacity:0.7; font-size:0.9rem;">
+      &ldquo;एक platform, अनगिनत संभावनाएं।&rdquo;
+    </p>
+    <a href="pages/labs.html" class="btn-primary" style="margin-top:36px">Explore Platform &rarr;</a>
+  </div>
+
+  <div class="platform-grid">
+    <div class="pcard">
+      <div class="pcard-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+          <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+        </svg>
+      </div>
+      <h3>Design Systems</h3>
+      <p>Drag, drop and build custom business systems in minutes. No tech degree needed.</p>
+    </div>
+    <div class="pcard">
+      <div class="pcard-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+        </svg>
+      </div>
+      <h3>Automate Workflows</h3>
+      <p>Streamline your daily tasks and reclaim hours every week. Kaam kam, results zyada.</p>
+    </div>
+    <div class="pcard">
+      <div class="pcard-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
+        </svg>
+      </div>
+      <h3>AI Intelligence</h3>
+      <p>Smart suggestions, demand forecasting, and real-time insights. Your AI advisor, always on.</p>
+    </div>
+    <div class="pcard">
+      <div class="pcard-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/>
+        </svg>
+      </div>
+      <h3>Growth Tools</h3>
+      <p>Track sales, analyze performance, and scale what works. Aage badhte raho.</p>
+    </div>
+  </div>
+</section>
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     BUILT FOR BHARAT
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<section id="bharat">
+
+  <!-- Monument silhouette background layer -->
+  <img
+    class="bharat-monument-bg"
+    src="assets/images/home/launchedge_home_monument_silhouettes.png"
+    alt=""
+    aria-hidden="true"
+  >
+
+  <!-- Decorative mandala shape -->
+  <svg class="bharat-mandala" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="var(--gold)" stroke-width="0.8">
+    <circle cx="150" cy="150" r="140"/><circle cx="150" cy="150" r="110"/><circle cx="150" cy="150" r="80"/>
+    <circle cx="150" cy="150" r="50"/><circle cx="150" cy="150" r="20"/>
+    <line x1="150" y1="10" x2="150" y2="290"/><line x1="10" y1="150" x2="290" y2="150"/>
+    <line x1="51" y1="51" x2="249" y2="249"/><line x1="249" y1="51" x2="51" y2="249"/>
+    <line x1="10" y1="90" x2="290" y2="210"/><line x1="10" y1="210" x2="290" y2="90"/>
+    <line x1="90" y1="10" x2="210" y2="290"/><line x1="210" y1="10" x2="90" y2="290"/>
+  </svg>
+
+
+
+  <div class="bharat-inner">
+    <div>
+      <div class="eyebrow">For the Nation</div>
+      <h2 class="section-title">
+        Built for Bharat.<br>
+        By <span class="accent">Bharat.</span>
+        <span class="bharat-hindi-line">हर व्यापार के लिए। हर भारतीय के लिए।</span>
+      </h2>
+      <p class="section-desc">
+        India's 63 million MSMEs deserve world-class tools built
+        for how India actually works. GST, UPI, local languages,
+        seasonal demand, and everything in between.
+        LaunchEdge was born here, for here.
+      </p>
+    </div>
+    <div class="bharat-cards">
+      <div class="bcard">
+        <span class="bcard-icon">&#8377;</span>
+        <h3>Affordable</h3>
+        <p>Enterprise power at MSME prices. Start free, grow as you scale.</p>
+      </div>
+      <div class="bcard">
+        <span class="bcard-icon">&#9673;</span>
+        <h3>Indian Workflows</h3>
+        <p>GST-ready, UPI-native, multi-lingual. Built for the way Indian businesses actually run.</p>
+      </div>
+      <div class="bcard">
+        <span class="bcard-icon">&#11044;</span>
+        <h3>Community Driven</h3>
+        <p>Join a growing network of 10,000+ founders and builders across India.</p>
+      </div>
+      <div class="bcard">
+        <span class="bcard-icon">&#8859;</span>
+        <h3>Secure &amp; Private</h3>
+        <p>Bank-grade encryption, zero third-party selling. Aapka data, aapka. Always.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     HOW IT WORKS
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<section id="how">
+  <!-- Background layers -->
+  <img
+    class="how-bg-img"
+    src="assets/images/home/launchedge_home_bg_dark.png"
+    alt=""
+    aria-hidden="true"
+  >
+  <div class="how-bg-fade"></div>
+  <div class="how-deco-grid"></div>
+  <svg class="how-bg-arch" viewBox="0 0 400 600" xmlns="http://www.w3.org/2000/svg">
+    <path d="M200,580 L200,320 Q200,180,350,100 Q200,180,50,100 Q200,180,200,320" stroke="var(--ink)" stroke-width="1" fill="none" opacity="0.6"/>
+    <path d="M200,480 Q280,400,320,300 Q280,200,200,180 Q120,200,80,300 Q120,400,200,480Z" stroke="var(--ink)" stroke-width="1" fill="none"/>
+    <circle cx="200" cy="120" r="40" stroke="var(--ink)" stroke-width="1" fill="none"/>
+    <circle cx="200" cy="120" r="20" stroke="var(--ink)" stroke-width="0.5" fill="none"/>
+    <line x1="200" y1="80" x2="200" y2="20" stroke="var(--ink)" stroke-width="1"/>
+    <polygon points="200,10 208,22 192,22" fill="var(--ink)" opacity="0.6"/>
+  </svg>
+
+  <div class="how-header">
+    <div class="eyebrow how-eyebrow">How It Works</div>
+    <h2 class="section-title">Simple steps.<br><span class="accent">Powerful impact.</span></h2>
+    <p class="section-desc" style="max-width:480px; margin:16px auto 0; text-align:center; opacity:0.65; font-size:0.92rem;">
+      तीन आसान कदम &mdash; और आपका business ready है दुनिया के लिए।
+    </p>
+  </div>
+
+  <div class="steps-row">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 1 1 7.072 0l-.548.547A3.374 3.374 0 0 0 14 18.469V19a2 2 0 1 1-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+        </svg>
+      </div>
+      <h3>Start — <span class="accent" style="font-size:0.95em">सोचो</span></h3>
+      <p>Share your idea with CoPilot. Get a validated plan, market insight, and a clear roadmap in minutes.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+          <rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 17h7M17 14v7"/>
+        </svg>
+      </div>
+      <h3>Build — <span class="accent" style="font-size:0.95em">बनाओ</span></h3>
+      <p>Use Labs to design your systems, automate workflows, and get operations running. No coding needed.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+        </svg>
+      </div>
+      <h3>Grow — <span class="accent" style="font-size:0.95em">बढ़ो</span></h3>
+      <p>Hire from Talent, track your growth, and scale across India. LaunchEdge grows with you at every stage.</p>
+    </div>
+  </div>
+</section>
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     CTA STRIP
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+
+<!-- FEEDBACK STRIP -->
+<section id="feedback-strip">
+  <div class="feedback-inner">
+    <div class="feedback-left">
+      <h2>Share your <em>thoughts.</em></h2>
+      <p>We're early stage and building for you. Every message we receive directly shapes what LaunchEdge becomes. Tell us what you need, what's broken, or what you love.</p>
+    </div>
+    <div>
+      <form class="feedback-form" id="homeFeedbackForm" action="https://formspree.io/f/xaqzykgn" method="POST">
+        <input type="email" name="email" placeholder="Your email address" required>
+        <textarea name="message" rows="4" placeholder="Your feedback, idea, or question..." required></textarea>
+        <input type="hidden" name="_subject" value="LaunchEdge Homepage Feedback">
+        <button type="submit" class="feedback-submit">Send Feedback &rarr;</button>
+        <p class="feedback-note">No spam, no selling. Only used to improve LaunchEdge for you.</p>
+      </form>
+      <div class="feedback-success" id="homeFeedbackSuccess" style="display:none">
+        <h3>&#x1F64F; Shukriya!</h3>
+        <p>Your message reached us. We read every single one.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="cta-strip">
+  <img
+    class="cta-particles-bg"
+    src="assets/images/home/launchedge_home_particles_overlay.png"
+    alt=""
+    aria-hidden="true"
+  >
+  <div class="cta-strip-inner">
+    <div class="cta-strip-eyebrow">Ready to Begin · शुरू करें</div>
+    <h2 class="cta-strip-title">
+      Your business deserves<br>
+      <span style="color:var(--gold); font-style:italic;">the best tools in Bharat.</span>
+    </h2>
+    <p class="cta-strip-sub">
+      Join 10,000+ Indian businesses already using LaunchEdge to build faster, smarter, and bigger.
+    </p>
+    <div class="cta-strip-actions">
+      <a href="pages/copilot.html" class="btn-primary" style="font-size:1rem; padding:14px 32px;">Start Free Today &rarr;</a>
+      <a href="pages/contact.html" class="btn-ghost" style="font-size:1rem; padding:14px 32px;">Talk to Us</a>
+    </div>
+  </div>
+</section>
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     FOOTER
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<footer>
+  <div class="footer-top-deco"></div>
+  <canvas id="footer-canvas"></canvas>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="index.html" class="logo">
+        <img class="logo-mark" src="assets/images/logo.png" alt="LaunchEdge">
+        LaunchEdge
+      </a>
+      <p>The operating system for modern Indian businesses.<br>
+      <span style="font-style:italic; opacity:0.5; font-size:0.85em;">भारत का अपना बिज़नेस OS।</span></p>
+    </div>
+    <div class="footer-col">
+      <h4>Products</h4>
+      <a href="pages/labs.html">LaunchEdge Labs</a>
+      <a href="pages/copilot.html">LaunchEdge CoPilot</a>
+      <a href="pages/talent.html">LaunchEdge Talent</a>
+    </div>
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <a href="#">Docs <span style="font-size:0.65rem;opacity:0.6">(Soon)</span></a>
+      <a href="#">Blog <span style="font-size:0.65rem;opacity:0.6">(Soon)</span></a>
+      <a href="#">Help Center <span style="font-size:0.65rem;opacity:0.6">(Soon)</span></a>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <a href="pages/about.html">About Us</a>
+      <a href="#">Careers <span style="font-size:0.65rem;opacity:0.6">(Soon)</span></a>
+      <a href="pages/contact.html">Contact</a>
+    </div>
+    <div class="footer-col">
+      <h4>Stay Connected</h4>
+      <div class="socials">
+        <a href="#" class="social-btn">in</a>
+        <a href="#" class="social-btn">&#120143;</a>
+        <a href="#" class="social-btn">&#9673;</a>
+        <a href="#" class="social-btn">&#9654;</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 LaunchEdge. All rights reserved. &mdash; Made with &#10084; in India.</p>
+      <p style="font-size:0.74rem;margin-top:8px;opacity:0.55;"><a href="pages/privacy.html" style="color:inherit;">Privacy Policy</a> &nbsp;&middot;&nbsp; <a href="pages/terms.html" style="color:inherit;">Terms of Service</a> &nbsp;&middot;&nbsp; <a href="pages/about.html" style="color:inherit;">About</a> &nbsp;&middot;&nbsp; <a href="pages/contact.html" style="color:inherit;">Contact</a></p>
+  </div>
+</footer>
+
+<!-- Scripts -->
+<script src="js/particles.js"></script>
+<script src="js/cursor.js"></script>
+<script src="js/scroll.js"></script>
+<script src="js/parallax.js"></script>
+<script src="js/home.js"></script>
+
+  
+  <script>
+    // Fetch visitor count from GoatCounter public API
+    // Replace "launchedge" with your actual GoatCounter site code after signup
+    (async function() {
+      try {
+        const res = await fetch('https://launchedge.goatcounter.com/api/v0/stats/total', {
+          headers: { 'Content-Type': 'application/json' }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          const total = data.total || 0;
+          const el = document.getElementById('visitor-count');
+          if (el) {
+            // Animate count up
+            let start = 0;
+            const end = total;
+            const duration = 1800;
+            const step = Math.ceil(end / (duration / 16));
+            const timer = setInterval(() => {
+              start = Math.min(start + step, end);
+              el.textContent = start >= 1000 ? (start/1000).toFixed(1) + 'K+' : start + '+';
+              if (start >= end) clearInterval(timer);
+            }, 16);
+          }
+        }
+      } catch(e) {
+        // If API not available yet, show a placeholder
+        const el = document.getElementById('visitor-count');
+        if (el) el.textContent = 'Live';
+      }
+    })();
+  </script>
+    <script>
+    // Homepage feedback form handler
+    const hff = document.getElementById('homeFeedbackForm');
+    const hfs = document.getElementById('homeFeedbackSuccess');
+    if (hff) {
+      hff.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const data = new FormData(hff);
+        try {
+          const res = await fetch(hff.action, { method: 'POST', body: data, headers: { 'Accept': 'application/json' } });
+          if (res.ok) { hff.style.display = 'none'; hfs.style.display = 'block'; }
+          else { alert('Something went wrong. Email us at hello@launchedge.in'); }
+        } catch(e) { alert('Could not send. Email us at hello@launchedge.in'); }
+      });
+    }
+  </script>
+  <!-- GoatCounter Analytics — privacy-friendly visitor tracking (no cookies) -->
+  <!-- Sign up at goatcounter.com and replace "launchedge" with your site code -->
+  <script data-goatcounter="https://launchedge.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+  <script>
+  /* ── Mobile Drawer ── */
+  function toggleDrawer() {
+    var drawer = document.getElementById('mobileDrawer');
+    var burger = document.getElementById('hamburger');
+    var isOpen = drawer.classList.contains('open');
+    if (isOpen) { closeDrawer(); } else { openDrawer(); }
+  }
+  function openDrawer() {
+    document.getElementById('mobileDrawer').classList.add('open');
+    document.getElementById('hamburger').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeDrawer() {
+    var d = document.getElementById('mobileDrawer');
+    var b = document.getElementById('hamburger');
+    if (d) { d.classList.remove('open'); }
+    if (b) { b.classList.remove('open'); }
+    document.body.style.overflow = '';
+  }
+  /* Close on ESC */
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeDrawer();
+  });
+  /* Close when clicking a link inside drawer */
+  var drawer = document.getElementById('mobileDrawer');
+  if (drawer) {
+    drawer.querySelectorAll('a').forEach(function(a) {
+      a.addEventListener('click', function() { closeDrawer(); });
+    });
+  }
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,45 @@
+/* ─────────────────────────────────────────────
+   LaunchEdge — Design Tokens
+   All CSS custom properties used site-wide
+───────────────────────────────────────────── */
+:root {
+  /* Base backgrounds */
+  --ivory:     #FAF7F2;
+  --beige:     #EDE8DE;
+  --mist:      #F2EDE5;
+
+  /* Gold system */
+  --gold:      #C4963A;
+  --bronze:    #A67850;
+  --gold-glow: rgba(196,150,58,0.22);
+  --gold-border: rgba(196,150,58,0.18);
+
+  /* Text */
+  --ink:       #0C0C0A;
+  --ink2:      #1A1915;
+  --text-dim:  #7A7060;
+  --text-faint: rgba(122,112,96,0.5);
+
+  /* Dark theme */
+  --dark-bg:      #0D0B09;
+  --dark-surface: #1A1713;
+  --dark-border:  rgba(196,150,58,0.15);
+
+  /* Overlays */
+  --overlay-gold-soft: rgba(196,150,58,0.07);
+  --overlay-dark-soft: rgba(12,12,10,0.35);
+  --overlay-dark-mid:  rgba(12,12,10,0.52);
+  --overlay-ivory:     rgba(250,247,242,0.82);
+
+  /* Border radius */
+  --radius-sm:  7px;
+  --radius-md:  12px;
+  --radius-lg:  16px;
+  --radius-xl:  24px;
+
+  /* Shadows */
+  --shadow-sm:  0 4px 16px rgba(0,0,0,0.06);
+  --shadow-md:  0 12px 40px rgba(0,0,0,0.10);
+  --shadow-lg:  0 24px 80px rgba(0,0,0,0.16);
+  --shadow-gold: 0 8px 32px rgba(196,150,58,0.18);
+}

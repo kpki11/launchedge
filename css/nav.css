@@ -1,0 +1,108 @@
+﻿/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+   LaunchEdge â€” Navigation (Shared)
+â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 10000;
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 56px;
+  background: rgba(250,247,242,0.72);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(196,150,58,0.1);
+  transition: padding 0.4s;
+}
+
+nav.scrolled {
+  padding: 14px 56px;
+}
+
+/* Dark nav variant (Talent page) */
+nav.dark {
+  background: rgba(13,11,9,0.82);
+  border-bottom: 1px solid rgba(196,150,58,0.1);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.35rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.logo-mark {
+  width: 32px; height: 32px;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+
+.nav-links {
+  display: flex;
+  gap: 38px;
+  align-items: center;
+}
+
+.nav-links a {
+  font-size: 0.8rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: var(--text-dim);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover {
+  color: var(--ink);
+}
+
+nav.dark .nav-links a {
+  color: rgba(250,247,242,0.5);
+}
+
+nav.dark .nav-links a:hover {
+  color: rgba(250,247,242,0.9);
+}
+
+.nav-cta {
+  background: var(--ink);
+  color: var(--ivory);
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 11px 22px;
+  font-size: 0.8rem;
+  font-family: 'Sora', sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  transition: background 0.25s, transform 0.2s;
+}
+
+.nav-cta:hover {
+  background: var(--ink2);
+  transform: translateY(-1px);
+}
+
+/* Talent CTA variant */
+.nav-cta.talent-cta {
+  background: #B8E04A;
+  color: var(--ink);
+}
+
+.nav-cta.talent-cta:hover {
+  background: #caf564;
+}
+
+@media (max-width: 900px) {
+  nav { padding: 18px 24px; }
+  nav.scrolled { padding: 14px 24px; }
+  .nav-links { display: none; }
+}
+

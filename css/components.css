@@ -1,0 +1,311 @@
+﻿/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+   LaunchEdge â€” Component Library (Shared)
+   Buttons, Cards, Stats, Eyebrow, Trust, Pills
+â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+
+/* â”€â”€ Buttons â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.btn-primary {
+  background: var(--ink);
+  color: var(--ivory);
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 14px 28px;
+  font-size: 0.82rem;
+  font-family: 'Sora', sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  cursor: none;
+  transition: all 0.25s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-primary:hover {
+  background: var(--ink2);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-dim);
+  border: 1px solid var(--gold-border);
+  border-radius: var(--radius-sm);
+  padding: 14px 24px;
+  font-size: 0.82rem;
+  font-family: 'Sora', sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  cursor: none;
+  transition: all 0.25s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-ghost:hover {
+  border-color: var(--gold);
+  color: var(--ink);
+}
+
+.btn-cta-outline {
+  background: transparent;
+  color: var(--ivory);
+  border: 1px solid rgba(196,150,58,0.5);
+  border-radius: var(--radius-sm);
+  padding: 14px 28px;
+  font-size: 0.82rem;
+  font-family: 'Sora', sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  cursor: none;
+  transition: all 0.25s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-cta-outline:hover {
+  background: rgba(196,150,58,0.12);
+  border-color: var(--gold);
+}
+
+/* â”€â”€ Eyebrow Label â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.eyebrow {
+  font-size: 0.68rem;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  color: var(--gold);
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.eyebrow::before { content: ''; display: inline-block; width: 26px; height: 1px; background: var(--gold); flex-shrink: 0; }
+
+/* â”€â”€ Section Headings â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+h2.section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.4rem, 4.5vw, 4rem);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+h2.section-title .accent {
+  color: var(--gold);
+  font-style: italic;
+}
+
+.section-desc {
+  margin-top: 22px;
+  font-size: 0.88rem;
+  color: var(--text-dim);
+  line-height: 1.8;
+  max-width: 340px;
+}
+
+/* â”€â”€ Stats Bar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+#stats {
+  background: var(--ink);
+  padding: 52px 56px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.stat-item {
+  text-align: center;
+  border-right: 1px solid rgba(255,255,255,0.06);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s, transform 0.6s;
+}
+
+.stat-item:last-child { border-right: none; }
+
+.stat-item.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.stat-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.6rem, 4vw, 3.8rem);
+  font-weight: 400;
+  color: var(--gold);
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-top: 8px;
+}
+
+/* â”€â”€ Trust Strip â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.trust-strip {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.trust-avatars {
+  display: flex;
+}
+
+.trust-avatars span {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  border: 2px solid var(--ivory);
+  display: inline-block;
+  background: linear-gradient(135deg, var(--beige), var(--gold));
+  margin-left: -8px;
+}
+
+.trust-avatars span:first-child { margin-left: 0; }
+
+.trust-text {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  line-height: 1.4;
+}
+
+.trust-text strong {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+/* Dark trust variant */
+.trust-strip.dark .trust-avatars span {
+  border-color: var(--dark-bg);
+}
+
+.trust-strip.dark .trust-text {
+  color: rgba(250,247,242,0.4);
+}
+
+.trust-strip.dark .trust-text strong {
+  color: rgba(250,247,242,0.8);
+}
+
+/* â”€â”€ Feature Cards â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.feature-card {
+  background: var(--mist);
+  border: 1px solid var(--gold-border);
+  border-radius: var(--radius-lg);
+  padding: 28px 24px;
+  cursor: none;
+  transition: box-shadow 0.35s, border-color 0.35s, transform 0.35s;
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+.feature-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.feature-card:hover {
+  box-shadow: var(--shadow-gold);
+  border-color: rgba(196,150,58,0.4);
+  transform: translateY(-4px);
+}
+
+.feature-card .card-icon {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  background: rgba(196,150,58,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gold);
+  font-size: 1.2rem;
+  margin-bottom: 16px;
+}
+
+.feature-card h3 {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+
+.feature-card p {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  line-height: 1.65;
+}
+
+/* â”€â”€ Dark Feature Card (Talent) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.feature-card.dark {
+  background: var(--dark-surface);
+  border-color: var(--dark-border);
+}
+
+.feature-card.dark h3 { color: var(--ivory); }
+.feature-card.dark p  { color: rgba(250,247,242,0.45); }
+
+/* â”€â”€ Scroll Hint â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.scroll-hint {
+  position: absolute;
+  bottom: 32px; left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  animation: fadeIn 1s 1.4s forwards;
+  cursor: none;
+  z-index: 8;
+}
+
+.scroll-dot {
+  width: 20px; height: 30px;
+  border: 1px solid rgba(196,150,58,0.4);
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  padding-top: 6px;
+}
+
+.scroll-dot::after {
+  content: '';
+  width: 4px; height: 6px;
+  background: var(--gold);
+  border-radius: 2px;
+  animation: scrollBounce 2s ease-in-out infinite;
+}
+
+.scroll-hint span {
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+/* â”€â”€ Reveal animation for scroll â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (max-width: 900px) {
+  #stats {
+    grid-template-columns: 1fr 1fr;
+    padding: 40px 24px;
+  }
+}
+

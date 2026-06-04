@@ -1,0 +1,89 @@
+/* ─────────────────────────────────────────────
+   LaunchEdge — Base Reset & Body
+───────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--ivory);
+  color: var(--ink);
+  font-family: 'Sora', sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  font-family: 'Sora', sans-serif;
+}
+
+/* Custom Cursor */
+#cursor {
+  position: fixed;
+  width: 10px; height: 10px;
+  background: var(--gold);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%,-50%);
+  transition: transform 0.12s ease, opacity 0.2s;
+}
+
+#cursor-ring {
+  position: fixed;
+  width: 36px; height: 36px;
+  border: 1px solid rgba(196,150,58,0.5);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%,-50%);
+  transition: width 0.3s, height 0.3s, opacity 0.2s;
+}
+
+/* Particle canvas — low z-index so it stays behind UI elements */
+#particle-canvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.30;
+}
+
+/* Section defaults */
+section {
+  padding: 120px 56px;
+}
+
+/* Common typography helpers */
+.gold-text {
+  color: var(--gold);
+  font-style: italic;
+}
+
+@media (max-width: 900px) {
+  section { padding: 80px 24px; }
+}
+
+/* Fallback cursor for touch/mobile or when custom cursor JS fails */
+@media (hover: none) {
+  body, a, button {
+    cursor: auto !important;
+  }
+}

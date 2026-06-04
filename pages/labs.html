@@ -1,0 +1,496 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LaunchEdge Labs – Build Your Business, Your Way</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Noto+Sans+Devanagari:wght@300;400;500&family=Sora:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/tokens.css">
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/animations.css">
+<link rel="stylesheet" href="../css/nav.css">
+<link rel="stylesheet" href="../css/footer.css">
+<link rel="stylesheet" href="../css/components.css">
+<link rel="stylesheet" href="../css/labs.css">
+<link rel="stylesheet" href="../css/mobile.css">
+<style>
+/* APK download note — hidden by default, shown on click */
+.ldownload-note {
+  display: none;
+  font-size: 0.78rem;
+  color: rgba(250,247,242,0.62);
+  margin-top: 10px;
+  line-height: 1.6;
+}
+.ldownload-note.visible {
+  display: block;
+}
+
+/* APK modal overlay */
+#apk-modal {
+  display: none;
+  position: fixed; inset: 0; z-index: 9999;
+  background: rgba(10,10,8,0.72);
+  backdrop-filter: blur(6px);
+  align-items: center; justify-content: center;
+}
+#apk-modal.open { display: flex; }
+.apk-modal-box {
+  background: #1a1a12;
+  border: 1px solid rgba(196,150,58,0.30);
+  border-radius: 18px;
+  padding: 36px 40px 32px;
+  max-width: 420px;
+  width: calc(100% - 48px);
+  position: relative;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+  animation: modalIn 0.3s cubic-bezier(0.22,1,0.36,1);
+}
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.93) translateY(12px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+.apk-modal-close {
+  position: absolute; top: 16px; right: 18px;
+  background: none; border: none;
+  color: rgba(250,247,242,0.4); font-size: 1.2rem;
+  cursor: pointer; line-height: 1;
+  transition: color 0.2s;
+}
+.apk-modal-close:hover { color: rgba(250,247,242,0.9); }
+.apk-modal-icon {
+  width: 48px; height: 48px; background: rgba(196,150,58,0.12);
+  border-radius: 12px; display: flex; align-items: center;
+  justify-content: center; margin-bottom: 18px;
+  color: #C4963A;
+}
+.apk-modal-icon svg { width: 24px; height: 24px; }
+.apk-modal-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem; font-weight: 400;
+  color: rgba(250,247,242,0.92); margin-bottom: 8px;
+}
+.apk-modal-version {
+  display: inline-block;
+  background: rgba(196,150,58,0.15);
+  border: 1px solid rgba(196,150,58,0.3);
+  border-radius: 20px; padding: 3px 11px;
+  font-size: 0.70rem; color: #C4963A;
+  letter-spacing: 0.08em; margin-bottom: 16px;
+}
+.apk-modal-steps {
+  list-style: none; padding: 0; margin: 0 0 24px;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.apk-modal-steps li {
+  display: flex; align-items: flex-start; gap: 11px;
+  font-size: 0.82rem; color: rgba(250,247,242,0.65);
+  line-height: 1.55;
+}
+.apk-modal-steps li .step-num {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: rgba(196,150,58,0.15); border: 1px solid rgba(196,150,58,0.3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.68rem; color: #C4963A; flex-shrink: 0; margin-top: 1px;
+}
+.apk-dl-btn {
+  width: 100%;
+  background: #C4963A; color: #0c0c0a;
+  border: none; border-radius: 10px;
+  padding: 14px 20px; font-family: 'Sora', sans-serif;
+  font-size: 0.86rem; font-weight: 500;
+  letter-spacing: 0.04em; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 9px;
+  transition: background 0.2s, transform 0.15s;
+  text-decoration: none;
+}
+.apk-dl-btn:hover { background: #d4a84a; transform: translateY(-1px); }
+.apk-dl-btn svg { width: 16px; height: 16px; }
+.apk-modal-note {
+  text-align: center; margin-top: 12px;
+  font-size: 0.68rem; color: rgba(250,247,242,0.28);
+}
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+<canvas id="particle-canvas"></canvas>
+
+<!-- ══════════════════════════════════════════════
+     NAV — Community + Help & Docs only
+══════════════════════════════════════════════ -->
+<nav id="nav">
+  <a href="../index.html" class="logo">
+    <img class="logo-mark" src="../assets/images/logo.png" alt="LaunchEdge">
+    LaunchEdge <span class="nav-labs-word">Labs</span>
+  </a>
+
+  <div class="nav-right-links">
+    <span class="nav-text-link nav-text-static" style="opacity:0.45;cursor:not-allowed;" title="Coming Soon">Community <span style="font-size:0.62rem;opacity:0.7">(Soon)</span></span>
+    <span class="nav-text-link nav-text-static" style="opacity:0.45;cursor:not-allowed;" title="Coming Soon">Help &amp; Docs <span style="font-size:0.62rem;opacity:0.7">(Soon)</span></span>
+  </div>
+  <button class="hamburger" id="hamburger" aria-label="Menu" onclick="toggleDrawer()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile Drawer -->
+<div class="mobile-drawer" id="mobileDrawer">
+  <a href="../index.html">Home</a>
+  <a href="labs.html">Labs</a>
+  <a href="talent.html">Talent</a>
+  <a href="copilot.html">CoPilot</a>
+  <a href="about.html">About Us</a>
+  <a href="contact.html">Contact</a>
+  <a href="labs.html" class="md-cta">Download Labs &rarr;</a>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     PAGE 1 – HERO
+══════════════════════════════════════════════ -->
+<section id="labs-p1">
+
+  <!-- Layer 1: Main background photo -->
+  <img class="lbg" src="../assets/images/labs/launchedge_labs_background.png" alt="">
+
+  <!-- Layer 2: Canvas board texture blended in -->
+  <div class="lcanvas-board-overlay"></div>
+
+  <!-- Layer 3: Left scrim for text legibility -->
+  <div class="lscrim"></div>
+
+  <!-- Layer 4: Green screen filter — low opacity, evokes freshness -->
+  <div class="lgreen-tint"></div>
+
+  <!-- Layer 5: Watercolor texture -->
+  <img class="lwc" src="../assets/images/labs/launchedge_labs_watercolor_overlays.png" alt="">
+
+  <!-- Layer 6: Floating particles -->
+  <canvas class="labs-particle-layer" id="labs-hero-canvas"></canvas>
+
+  <div class="lhero-content">
+
+    <!-- "Free ERP · Now Live" product badge -->
+    <div class="lhero-product-badge" style="margin-top: 8px;">
+      <span class="lbadge-dot"></span>
+      <span class="lbadge-text">Free ERP for Indian Businesses &nbsp;·&nbsp; Now Live</span>
+    </div>
+
+    <div class="lhero-eyebrow">Visual ERP &nbsp;·&nbsp; No Code &nbsp;·&nbsp; Mobile First</div>
+
+    <h1 class="lhero-h1">
+      Build anything.<br>
+      <em class="lhero-gold">Your way.</em>
+    </h1>
+
+    <p class="lhero-desc">
+      Import your Excel or CSV files. Build tables. Connect them together.
+      See your entire business in one place.
+      <strong>Your data never leaves your phone. We store nothing.</strong>
+    </p>
+
+    <p class="lhero-hindi">आपका व्यवसाय, आपकी शर्तों पर।</p>
+
+    <div class="lhero-actions">
+      <a href="#" class="lbtn-primary" id="heroDownloadBtn" onclick="openApkModal(event)">
+        Download LaunchEdge Labs
+        <span class="lbtn-tag">Free &nbsp;·&nbsp; v1.1.0 &nbsp;·&nbsp; Android APK</span>
+      </a>
+    </div>
+
+    <div class="lhero-trust">
+      <span class="ltrust-dot ltrust-green"></span>
+      <span class="ltrust-item">Offline ready</span>
+      <span class="lt-sep">·</span>
+      <span class="ltrust-item">Your files, your drive</span>
+      <span class="lt-sep">·</span>
+      <span class="ltrust-item">Zero data collected</span>
+    </div>
+
+  </div>
+
+  <!-- SVG matrix connector lines layer — full hero -->
+  <svg class="lhero-connectors" id="hero-connectors" xmlns="http://www.w3.org/2000/svg"></svg>
+
+  <!-- Floating product nodes -->
+  <div class="lhero-nodes" id="lhero-nodes">
+    <div class="lnode lnode-labs" id="lnode-0">
+      <div class="lnode-dot lnode-dot-active"></div>
+      <div class="lnode-body"><span class="lnode-name">Labs</span><span class="lnode-status lnode-status-live">Live</span></div>
+      <span class="lnode-sub">Free Visual ERP</span>
+    </div>
+    <div class="lnode lnode-soon" id="lnode-1">
+      <div class="lnode-dot"></div>
+      <div class="lnode-body"><span class="lnode-name">CoPilot</span><span class="lnode-status">Soon</span></div>
+      <span class="lnode-sub">AI Business Assistant</span>
+    </div>
+    <div class="lnode lnode-soon" id="lnode-2">
+      <div class="lnode-dot"></div>
+      <div class="lnode-body"><span class="lnode-name">Talent</span><span class="lnode-status">Soon</span></div>
+      <span class="lnode-sub">HR &amp; Hiring</span>
+    </div>
+    <div class="lnode lnode-soon" id="lnode-3">
+      <div class="lnode-dot"></div>
+      <div class="lnode-body"><span class="lnode-name">Commerce</span><span class="lnode-status">Soon</span></div>
+      <span class="lnode-sub">Sell Online</span>
+    </div>
+  </div>
+
+  <div class="lscroll-hint">
+    <div class="lscroll-dot"></div>
+  </div>
+
+</section>
+
+<!-- ══════════════════════════════════════════════
+     PAGE 2 – FEATURES + DOWNLOAD
+══════════════════════════════════════════════ -->
+<section id="labs-page2">
+
+  <!-- Canvas board background -->
+  <div class="lp2-bg-img"></div>
+  <div class="lp2-bg-scrim"></div>
+
+  <div class="lp2-header">
+    <div class="lp2-eyebrow">हर ज़रूरत के लिए एक सुविधा</div>
+    <h2 class="lp2-title">
+      Every building block<br>
+      <span class="lp2-gold">you will ever need.</span>
+    </h2>
+    <p class="lp2-sub">
+      Smart Tables · Live Charts · Workflow · Linked Data · 50+ Templates
+    </p>
+  </div>
+
+  <div class="lp2-grid">
+
+    <div class="lp2-card">
+      <div class="lp2-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="9" x2="9" y2="21"/></svg>
+      </div>
+      <h3>Smart Tables</h3>
+      <p>Excel ya CSV import karo. Rows link karo. Koi formula nahi chahiye.</p>
+      <span class="lp2-tag-en">Import CSV / Excel</span>
+    </div>
+
+    <div class="lp2-card">
+      <div class="lp2-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      </div>
+      <h3>Live Analytics</h3>
+      <p>Data badlega toh chart khud update hoga. Apna business ek nazar mein.</p>
+      <span class="lp2-tag-en">Bar, Line, Pie Charts</span>
+    </div>
+
+    <div class="lp2-card">
+      <div class="lp2-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+      </div>
+      <h3>Tables ko Joodo</h3>
+      <p>Stock se Order, Order se Invoice, Invoice se Payment. Sab connected.</p>
+      <span class="lp2-tag-en">Linked Databases</span>
+    </div>
+
+    <div class="lp2-card">
+      <div class="lp2-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+      </div>
+      <h3>Apna Workflow Banao</h3>
+      <p>Condition set karo. Record automatic update ho, alert jaaye. Koi coding nahi.</p>
+      <span class="lp2-tag-en">Workflow Automation</span>
+    </div>
+
+    <div class="lp2-card">
+      <div class="lp2-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.63 3.44 2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.61a16 16 0 0 0 6 6l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16z"/></svg>
+      </div>
+      <h3>Google Drive Connect</h3>
+      <p>Apni Google Drive se files seedha import karo. Data aapke paas, humse door.</p>
+      <span class="lp2-tag-en">Google Drive Import</span>
+    </div>
+
+    <div class="lp2-card">
+      <div class="lp2-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      </div>
+      <h3>Calendar View</h3>
+      <p>Koi bhi date field calendar ban jaata hai. Delivery ya payment miss nahi hogi.</p>
+      <span class="lp2-tag-en">Date to Calendar</span>
+    </div>
+
+    <div class="lp2-card">
+      <div class="lp2-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      </div>
+      <h3>Reports</h3>
+      <p>Live data se PDF report banao. Customer ko ya team ko share karo turant.</p>
+      <span class="lp2-tag-en">Auto PDF Reports</span>
+    </div>
+
+    <div class="lp2-card">
+      <div class="lp2-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+      </div>
+      <h3>50 se Zyada Templates</h3>
+      <p>Inventory, billing, HR, expenses. Sirf choose karo aur shuru ho jao.</p>
+      <span class="lp2-tag-en">Ready to Use</span>
+    </div>
+
+  </div>
+
+  <!-- Privacy strip -->
+  <div class="lp2-privacy">
+    <div class="lp2-lock-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="16" height="16"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    </div>
+    <div class="lp2-priv-text">
+      <strong>Aapka data, sirf aapka.</strong>
+      100% offline. Stored on your phone. Zero data collection. Ever.
+    </div>
+  </div>
+
+  <!-- Download — updated: App Store stays Coming Soon, Google Play now opens APK modal -->
+  <div class="lp2-download">
+    <p class="lp2-dl-label">Abhi Download Karo</p>
+    <div class="lp2-dl-btns">
+      <a href="#" class="ldl-btn ldl-dim" style="opacity:0.45;pointer-events:none;cursor:not-allowed;" title="Coming Soon">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.7 9.05 7.37c1.33.07 2.24.79 3.02.82.91-.18 1.78-.95 3.07-.82 1.31.11 2.29.62 2.96 1.57-2.72 1.64-2.28 5.38.62 6.44-.56 1.54-1.31 3.06-1.67 4.9zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
+        <span class="ldl-text">
+          <span class="ldl-store">App Store</span>
+          <span class="ldl-note">iOS · Coming Soon</span>
+        </span>
+      </a>
+      <a href="#" class="ldl-btn ldl-active" onclick="openApkModal(event)">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M3.18 23.76a1 1 0 0 0 1.03-.07l11.07-6.28-2.41-2.41-9.69 8.76zM.58 1.18A1 1 0 0 0 0 2v20a1 1 0 0 0 .58.82l.07.04 11.21-11.21v-.26L.65 1.13l-.07.05zM22.42 10.49l-2.55-1.45-2.71 2.71 2.71 2.71 2.56-1.45a1 1 0 0 0 0-1.52zM4.21.31L15.28 6.59l-2.42 2.42L3.18.25A1 1 0 0 1 4.21.31z"/></svg>
+        <span class="ldl-text">
+          <span class="ldl-store">Android APK</span>
+          <span class="ldl-note">Version 1.1.0 · Free</span>
+        </span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Footer line -->
+  <div class="lp2-footer-line">
+    <a href="../index.html" class="logo lp2-logo">
+      <img class="logo-mark" src="../assets/images/logo.png" alt="LaunchEdge">
+      LaunchEdge
+    </a>
+    <span class="lp2-copy">&copy; 2026 LaunchEdge. All rights reserved.</span>
+    <div class="lp2-footlinks">
+      <a href="privacy.html" class="lp2-footlink">Privacy</a>
+      <a href="terms.html" class="lp2-footlink">Terms</a>
+      <a href="#" class="lp2-footlink" style="opacity:0.45;pointer-events:none;" title="Coming Soon">Community <span style="font-size:0.62rem">(Soon)</span></a>
+    </div>
+  </div>
+
+</section>
+
+<!-- ══════════════════════════════════════════════
+     APK DOWNLOAD MODAL
+══════════════════════════════════════════════ -->
+<div id="apk-modal">
+  <div class="apk-modal-box">
+    <button class="apk-modal-close" onclick="closeApkModal()">&times;</button>
+    <div class="apk-modal-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 17V3M7 8l5 5 5-5M3 17h18v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-2z"/>
+      </svg>
+    </div>
+    <div class="apk-modal-title">Download LaunchEdge Labs</div>
+    <span class="apk-modal-version">Version 1.1.0 &nbsp;·&nbsp; Android APK</span>
+    <ul class="apk-modal-steps">
+      <li>
+        <span class="step-num">1</span>
+        <span>Tap the button below to download the APK file directly to your Android phone.</span>
+      </li>
+      <li>
+        <span class="step-num">2</span>
+        <span>If prompted, go to <strong style="color:rgba(250,247,242,0.82)">Settings &rarr; Install unknown apps</strong> and allow your browser to install APKs.</span>
+      </li>
+      <li>
+        <span class="step-num">3</span>
+        <span>Open the downloaded file and tap <strong style="color:rgba(250,247,242,0.82)">Install</strong>. That's it — you're live!</span>
+      </li>
+    </ul>
+    <a href="#" class="apk-dl-btn" id="apkDownloadLink">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 17V3M7 8l5 5 5-5M3 21h18"/>
+      </svg>
+      Download APK &nbsp;&middot;&nbsp; v1.1.0
+    </a>
+    <p class="apk-modal-note">Not on Play Store yet. Direct APK download. Free forever.</p>
+  </div>
+</div>
+
+<script src="../js/particles.js"></script>
+<script src="../js/cursor.js"></script>
+<script src="../js/scroll.js"></script>
+<script src="../js/parallax.js"></script>
+<script src="../js/home.js"></script>
+<script src="../js/labs.js"></script>
+
+<script>
+// APK Modal
+function openApkModal(e) {
+  if (e) e.preventDefault();
+  document.getElementById('apk-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeApkModal() {
+  document.getElementById('apk-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+// Close on backdrop click
+document.getElementById('apk-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeApkModal();
+});
+// ESC key
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeApkModal();
+});
+// TODO: Replace '#' in apkDownloadLink href with the real APK URL when hosted
+// e.g. document.getElementById('apkDownloadLink').href = 'https://github.com/yourusername/launchedge/releases/download/v1.1.0/launchedge-v1.1.0.apk';
+</script>
+
+  <!-- GoatCounter Analytics — privacy-friendly visitor tracking (no cookies) -->
+  <script data-goatcounter="https://launchedge.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+  <script>
+  /* ── Mobile Drawer ── */
+  function toggleDrawer() {
+    var drawer = document.getElementById('mobileDrawer');
+    var burger = document.getElementById('hamburger');
+    var isOpen = drawer.classList.contains('open');
+    if (isOpen) { closeDrawer(); } else { openDrawer(); }
+  }
+  function openDrawer() {
+    document.getElementById('mobileDrawer').classList.add('open');
+    document.getElementById('hamburger').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeDrawer() {
+    var d = document.getElementById('mobileDrawer');
+    var b = document.getElementById('hamburger');
+    if (d) { d.classList.remove('open'); }
+    if (b) { b.classList.remove('open'); }
+    document.body.style.overflow = '';
+  }
+  /* Close on ESC */
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeDrawer();
+  });
+  /* Close when clicking a link inside drawer */
+  var drawer = document.getElementById('mobileDrawer');
+  if (drawer) {
+    drawer.querySelectorAll('a').forEach(function(a) {
+      a.addEventListener('click', function() { closeDrawer(); });
+    });
+  }
+  </script>
+</body>
+</html>

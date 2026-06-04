@@ -1,0 +1,15 @@
+
+/* SVG connector lines layer — full hero, on top of nodes so lines exit edges cleanly */
+.lhero-connectors {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 11;
+  pointer-events: none;
+  overflow: visible;
+}
+
+/* Node container — full hero so connectors can span across */
+.lhero-nodes {
+  position: absolute;

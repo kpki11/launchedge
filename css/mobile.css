@@ -1,0 +1,533 @@
+﻿/* ═══════════════════════════════════════════════════════════════
+   LaunchEdge — Mobile Responsive Layer
+   Handles everything below 768px (phones) and 900px (tablets)
+   Load this LAST in every page's <head>
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ──────────────────────────────────────────────────────────────
+   HAMBURGER MENU BUTTON (shown on mobile, hidden on desktop)
+   ─────────────────────────────────────────────────────────────── */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 38px;
+  height: 38px;
+  background: none;
+  border: 1px solid rgba(196,150,58,0.25);
+  border-radius: 8px;
+  cursor: pointer;
+  z-index: 10001;
+  flex-shrink: 0;
+  padding: 0;
+  transition: border-color 0.2s;
+}
+.hamburger:hover { border-color: rgba(196,150,58,0.6); }
+
+.hamburger span {
+  display: block;
+  width: 18px;
+  height: 1.5px;
+  background: currentColor;
+  border-radius: 2px;
+  transition: all 0.28s cubic-bezier(0.4,0,0.2,1);
+  transform-origin: center;
+}
+
+/* Dark nav variant */
+nav.dark .hamburger { color: rgba(250,247,242,0.8); border-color: rgba(196,150,58,0.3); }
+nav:not(.dark) .hamburger { color: var(--ink); }
+
+/* Open state — morph to X */
+.hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+/* ──────────────────────────────────────────────────────────────
+   MOBILE DRAWER (slides down from nav)
+   ─────────────────────────────────────────────────────────────── */
+.mobile-drawer {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  background: rgba(250,247,242,0.97);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  border-bottom: 1px solid rgba(196,150,58,0.15);
+  padding: 80px 24px 28px;
+  z-index: 9999;
+  flex-direction: column;
+  gap: 0;
+  transform: translateY(-100%);
+  transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+}
+
+.mobile-drawer.dark {
+  background: rgba(13,11,9,0.97);
+  border-bottom-color: rgba(196,150,58,0.12);
+}
+
+.mobile-drawer.open {
+  transform: translateY(0);
+}
+
+.mobile-drawer a,
+.mobile-drawer button.md-link {
+  display: block;
+  font-family: 'Sora', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: var(--ink);
+  text-decoration: none;
+  padding: 14px 4px;
+  border-bottom: 1px solid rgba(196,150,58,0.08);
+  letter-spacing: 0.02em;
+  background: none;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  text-align: left;
+  width: 100%;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.mobile-drawer.dark a,
+.mobile-drawer.dark button.md-link {
+  color: rgba(250,247,242,0.82);
+  border-bottom-color: rgba(196,150,58,0.08);
+}
+
+.mobile-drawer a:last-of-type { border-bottom: none; }
+
+.mobile-drawer a.soon,
+.mobile-drawer button.md-link.soon {
+  opacity: 0.38;
+  pointer-events: none;
+}
+
+.mobile-drawer a.soon::after,
+.mobile-drawer button.md-link.soon::after {
+  content: ' (Soon)';
+  font-size: 0.7rem;
+  opacity: 0.7;
+}
+
+.mobile-drawer .md-cta {
+  margin-top: 18px;
+  display: block;
+  width: 100%;
+  text-align: center;
+  background: var(--ink);
+  color: var(--ivory) !important;
+  border-radius: 9px;
+  padding: 14px 20px !important;
+  border-bottom: none !important;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+
+.mobile-drawer.dark .md-cta {
+  background: #C4963A;
+  color: #0c0c0a !important;
+}
+
+
+/* ──────────────────────────────────────────────────────────────
+   SHOW HAMBURGER ON MOBILE
+   ─────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .hamburger { display: flex; }
+  .mobile-drawer { display: flex; }
+
+  /* Hide nav CTA on mobile — it's in the drawer */
+  #nav .nav-cta { display: none; }
+
+  /* Compact nav padding */
+  #nav { padding: 16px 20px; }
+  #nav.scrolled { padding: 12px 20px; }
+}
+
+
+/* ──────────────────────────────────────────────────────────────
+   BASE / BODY
+   ─────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  html { font-size: 15px; }
+  body { overflow-x: hidden; }
+
+  /* Kill custom cursor on touch — it causes ghost dot */
+  #cursor, #cursor-ring { display: none !important; }
+  * { cursor: auto !important; }
+}
+
+
+/* ──────────────────────────────────────────────────────────────
+   INDEX.HTML — HERO
+   ─────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  #hero {
+    grid-template-columns: 1fr;
+    padding: 96px 22px 72px;
+    gap: 48px;
+    min-height: auto;
+  }
+
+  h1.hero-headline {
+    font-size: clamp(2.6rem, 9vw, 3.4rem);
+    line-height: 1.08;
+  }
+
+  .hero-sub { max-width: 100%; font-size: 0.88rem; }
+
+  .hero-cards {
+    flex-direction: column;
+    width: 100%;
+    justify-self: stretch;
+    align-self: start;
+  }
+
+  .hero-card { min-width: unset; width: 100%; }
+
+  .hero-trust { margin-top: 32px; }
+}
+
+@media (max-width: 480px) {
+  #hero { padding: 88px 18px 60px; }
+  h1.hero-headline { font-size: clamp(2.2rem, 10vw, 2.8rem); }
+  .hero-rings-wrap { display: none; } /* too heavy on small screens */
+  .hero-figure { height: 40%; opacity: 0.55; }
+  .hero-actions { gap: 10px; }
+  .hero-actions .btn-primary,
+  .hero-actions .btn-ghost {
+    font-size: 0.8rem;
+    padding: 12px 18px;
+  }
+}
+
+
+/* ──────────────────────────────────────────────────────────────
+   INDEX.HTML — STATS, PLATFORM, BHARAT, HOW IT WORKS, FOOTER
+   ─────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  #stats {
+    grid-template-columns: 1fr 1fr;
+    padding: 40px 22px;
+    gap: 16px;
+  }
+
+  #platform {
+    padding: 72px 22px 56px;
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .platform-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  .section-desc { max-width: 100%; }
+
+  #bharat { padding: 72px 22px 64px; }
+
+  .bharat-inner {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+
+  .bharat-cards { grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  #how { padding: 72px 22px 80px; }
+
+  .steps-row {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    max-width: 320px;
+  }
+
+  .steps-row::before { display: none; }
+
+  #feedback-strip { padding: 72px 22px; }
+  .feedback-inner { grid-template-columns: 1fr; gap: 32px; }
+
+  #cta-strip { padding: 72px 22px; }
+
+  footer { padding: 56px 22px 32px; }
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    margin-bottom: 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .platform-grid { grid-template-columns: 1fr; }
+  .bharat-cards { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+
+  #stats .stat-item { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  #stats .stat-item:last-child { border-bottom: none; }
+}
+
+
+/* ──────────────────────────────────────────────────────────────
+   LABS.HTML — HERO (PAGE 1)
+   ─────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  #labs-p1 {
+    padding: 96px 22px 72px;
+    min-height: auto;
+    height: auto;
+    align-items: flex-start;
+  }
+
+  .lhero-content {
+    padding-top: 20px;
+    max-width: 100%;
+  }
+
+  .lhero-h1 { font-size: clamp(2.8rem, 9vw, 3.6rem); }
+
+  .lhero-desc { max-width: 100%; font-size: 0.86rem; }
+
+  .lhero-trust { flex-wrap: wrap; gap: 7px; }
+
+  .lbtn-primary { font-size: 0.82rem; padding: 13px 20px; }
+  .lbtn-tag { font-size: 0.56rem; }
+
+  /* Nodes hidden on mobile — done in labs.css already */
+}
+
+@media (max-width: 480px) {
+  .lhero-h1 { font-size: clamp(2.2rem, 10vw, 2.8rem); }
+  .lhero-product-badge { font-size: 0.60rem; }
+  .lhero-hindi { font-size: 0.95rem; }
+
+  .ltrust-item { font-size: 0.66rem; padding: 3px 9px; }
+  .lt-sep { display: none; }
+}
+
+/* LABS PAGE 2 */
+@media (max-width: 900px) {
+  #labs-page2 { padding: 56px 22px 36px; }
+  .lp2-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .lp2-title { font-size: clamp(1.8rem, 6vw, 2.4rem); }
+}
+
+@media (max-width: 480px) {
+  .lp2-grid { grid-template-columns: 1fr; }
+  .lp2-dl-btns { flex-direction: column; align-items: center; }
+  .ldl-btn { width: 100%; max-width: 280px; justify-content: center; }
+  .lp2-privacy { flex-direction: column; text-align: center; gap: 8px; }
+  .lp2-footer-line { flex-direction: column; align-items: center; text-align: center; gap: 12px; }
+  .lp2-footlinks { justify-content: center; }
+}
+
+/* APK Modal on mobile */
+@media (max-width: 480px) {
+  .apk-modal-box { padding: 28px 22px 24px; }
+  .apk-modal-title { font-size: 1.2rem; }
+}
+
+
+/* ──────────────────────────────────────────────────────────────
+   COPILOT.HTML
+   ─────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  #copilot-hero {
+    grid-template-columns: 1fr !important;
+    padding: 96px 22px 140px !important;
+    gap: 40px !important;
+  }
+
+  .copilot-mascot  { width: 280px !important; bottom: 8% !important; left: 50% !important; transform: translateX(-50%) !important; }
+  .copilot-pedestal{ width: 220px !important; bottom: 0% !important; left: 50% !important; transform: translateX(-50%) !important; }
+  .copilot-mandala { width: 360px !important; left: 50% !important; top: 52% !important; }
+  .copilot-orb     { width: 80px !important; bottom: 38% !important; }
+
+  .copilot-cards {
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+  }
+
+  .prompt-card { flex: 1 1 calc(50% - 5px); min-width: 0; }
+
+  .copilot-input-bar {
+    width: calc(100% - 40px) !important;
+    bottom: 40px !important;
+  }
+
+  #feature-strip {
+    grid-template-columns: 1fr 1fr !important;
+    padding: 40px 22px 0 !important;
+    gap: 0 !important;
+  }
+
+  .feature-item:nth-child(2n) { border-right: none !important; }
+
+  footer { padding: 40px 22px 28px !important; }
+  .footer-top { flex-direction: column !important; gap: 24px !important; }
+  .footer-links { flex-wrap: wrap !important; gap: 14px !important; }
+
+  /* How-it-works modal */
+  .how-modal-box { padding: 32px 24px 28px; }
+  .how-modal-title { font-size: 1.55rem; }
+}
+
+@media (max-width: 480px) {
+  #copilot-hero { padding: 88px 18px 130px !important; }
+
+  .copilot-left .hero-headline { font-size: clamp(2.4rem, 9vw, 3rem) !important; }
+
+  .copilot-cards { flex-direction: column !important; }
+  .prompt-card { flex: unset; width: 100%; }
+
+  #feature-strip { grid-template-columns: 1fr !important; }
+  .feature-item { border-right: none !important; border-bottom: 1px solid rgba(196,150,58,0.08); }
+  .feature-item:last-child { border-bottom: none; }
+
+  /* Chat drawer full width on mobile */
+  #chat-drawer {
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 18px 18px 0 0 !important;
+    max-height: 80vh !important;
+  }
+}
+
+
+/* ──────────────────────────────────────────────────────────────
+   TALENT.HTML
+   ─────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  #talent-hero {
+    grid-template-columns: 1fr !important;
+    padding: 96px 22px 56px !important;
+    gap: 32px !important;
+  }
+
+  /* Map — show as inline block below text on mobile */
+  .talent-map-new {
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    transform: none !important;
+    width: 75% !important;
+    margin: 0 auto !important;
+    display: block !important;
+  }
+
+  /* Hide floating profile cards on mobile */
+  .profile-card { display: none !important; }
+  .connector-svg { display: none !important; }
+
+  #talent-hero .hero-headline {
+    font-size: clamp(2.8rem, 9vw, 3.8rem) !important;
+    line-height: 1.06 !important;
+  }
+
+  #talent-hero .hero-sub { margin-top: 24px !important; margin-bottom: 24px !important; }
+
+  .hero-actions { flex-wrap: wrap; gap: 12px; }
+
+  #longchase-banner {
+    flex-direction: column !important;
+    padding: 20px 22px !important;
+    gap: 16px !important;
+    align-items: flex-start !important;
+  }
+
+  #longchase-banner button { width: 100%; justify-content: center; }
+
+  #talent-features {
+    grid-template-columns: 1fr 1fr !important;
+    padding: 56px 22px !important;
+    gap: 14px !important;
+  }
+
+  #talent-stats {
+    grid-template-columns: 1fr 1fr !important;
+    padding: 36px 22px !important;
+    gap: 16px !important;
+  }
+
+  footer { padding: 56px 22px 32px; }
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 40px; }
+}
+
+@media (max-width: 480px) {
+  #talent-hero { padding: 88px 18px 48px !important; }
+  #talent-hero .hero-headline { font-size: clamp(2.3rem, 10vw, 3rem) !important; }
+  .talent-map-new { width: 90% !important; }
+
+  #talent-features { grid-template-columns: 1fr !important; }
+  #talent-stats { grid-template-columns: 1fr 1fr; }
+  .footer-grid { grid-template-columns: 1fr; }
+}
+
+
+/* ──────────────────────────────────────────────────────────────
+   SHARED — SECTIONS padding on mobile
+   ─────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  section, #platform, #bharat, #how, #cta-strip, #feedback-strip {
+    padding-left: 22px !important;
+    padding-right: 22px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  section, #platform, #bharat, #how, #cta-strip, #feedback-strip {
+    padding-left: 18px !important;
+    padding-right: 18px !important;
+  }
+
+  /* Slightly smaller section headings on small phones */
+  h2.section-title { font-size: clamp(2rem, 8vw, 2.6rem); }
+
+  .btn-primary, .btn-ghost, .btn-cta-outline {
+    font-size: 0.8rem;
+    padding: 13px 18px;
+  }
+}
+
+
+/* ──────────────────────────────────────────────────────────────
+   INNER PAGES (about, contact, privacy, terms)
+   ─────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  /* These pages use simple stacked layouts — just fix padding */
+  main, .page-content, .page-inner {
+    padding-left: 22px !important;
+    padding-right: 22px !important;
+  }
+}
+
+/* ── Talent nav: hide big buttons on mobile, show only hamburger ── */
+@media (max-width: 900px) {
+  .nav-right-btns .nav-early-access,
+  .nav-right-btns .talent-cta {
+    display: none;
+  }
+  .nav-right-btns {
+    gap: 0 !important;
+  }
+
+  /* Copilot nav — hide links */
+  #nav .nav-links { display: none; }
+
+  /* Labs nav right links */
+  .nav-right-links { display: none; }
+
+  /* Make logo text not overflow */
+  .logo { font-size: 1.15rem; }
+  .logo-mark { width: 26px; height: 26px; }
+}
+
+@media (max-width: 480px) {
+  .logo { font-size: 1rem; }
+}
