@@ -44,4 +44,4 @@ desktop.ini
 .vscode/
 .idea/
 # API keys — never commit
-js/copilot.config.js
+# js/copilot.config.js  (now tracked — keys are intentionally public for this client-side app)
