@@ -531,3 +531,39 @@ nav:not(.dark) .hamburger { color: var(--ink); }
 @media (max-width: 480px) {
   .logo { font-size: 1rem; }
 }
+/* ── Copilot page: nav logo always visible on ivory bg ── */
+@media (max-width: 900px) {
+  #nav .logo {
+    color: var(--ink) !important;
+    opacity: 1 !important;
+  }
+  #nav .logo img.logo-mark {
+    opacity: 1 !important;
+  }
+
+  /* Labs footer links — wrap on mobile */
+  .lp2-footer-line {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    gap: 14px !important;
+  }
+  .lp2-footlinks {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 6px 14px !important;
+  }
+  .lp2-footlink { font-size: 0.70rem !important; }
+  .lp2-copy { text-align: center !important; }
+  .lp2-logo { justify-content: center !important; }
+
+  /* Copilot: make the prompt cards visible below hero on mobile as a scroll section */
+  .copilot-cards-mobile-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 24px 18px 8px;
+    background: rgba(250,247,242,0.95);
+  }
+}
