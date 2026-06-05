@@ -1,0 +1,306 @@
+﻿// src/screens/TodayScreen.tsx
+// Tagline: "Everything important, right when you open the app."
+// hero_brush_gold_1.jpeg: decorative strip behind the greeting header
+import React, { useEffect, useState, useCallback } from 'react';
+import {
+  View, Text, StyleSheet, ScrollView, RefreshControl,
+  TouchableOpacity, Image,
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
+import { Theme, Colors } from '../theme/colors';
+import { Typography, Spacing, Radius } from '../theme/typography';
+import { KPICard } from '../components/KPICard';
+import { SyncBadge } from '../components/SyncBadge';
+import { useBusinessStore } from '../store/useBusinessStore';
+import { useTableStore } from '../store/useTableStore';
+import { getRecentAuditLog } from '../services/database';
+import { getGreeting, formatCurrency, formatRelativeTime } from '../utils/formatters';
+
+const QUICK_ACTIONS = [
+  { icon: 'add-circle-outline' as const, label: 'Add Entry', screen: 'Tables' },
+  { icon: 'scan-outline' as const, label: 'Scan / Import', screen: 'Add' },
+  { icon: 'search-outline' as const, label: 'Search Tables', screen: 'Tables' },
+];
+
+export default function TodayScreen({ navigation }: any) {
+  const { activeBusiness } = useBusinessStore();
+  const { tables, loadTables } = useTableStore();
+  const [recentActivity, setRecentActivity] = useState<any[]>([]);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const loadData = useCallback(async () => {
+    if (!activeBusiness?.id) return;
+    await loadTables(activeBusiness.id);
+    const log = await getRecentAuditLog(activeBusiness.id, 5);
+    setRecentActivity(log);
+  }, [activeBusiness?.id]);
+
+  useEffect(() => { loadData(); }, [loadData]);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await loadData();
+    setRefreshing(false);
+  };
+
+  const totalRecords = tables.reduce((sum: number, t: any) => sum + (t.recordCount || 0), 0);
+
+  return (
+    <SafeAreaView style={styles.root}>
+
+      {/* Header strip — hero_brush_gold_1.jpeg as decorative strip */}
+      <View style={styles.headerWrap}>
+        <Image
+          source={require('../../assets/images/hero_brush_gold_1.jpeg')}
+          style={styles.headerStrip}
+          resizeMode="cover"
+        />
+        <View style={styles.headerOverlay} />
+        <View style={styles.headerContent}>
+          <View style={styles.headerLeft}>
+            <Text style={styles.greeting} numberOfLines={1}>
+              {getGreeting(activeBusiness?.name || 'there')}
+            </Text>
+            <Text style={styles.tagline}>Everything important, right here.</Text>
+          </View>
+          <SyncBadge />
+        </View>
+      </View>
+
+      <ScrollView
+        style={styles.scroll}
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor={Theme.primary}
+            colors={[Theme.primary]}
+          />
+        }
+      >
+        {/* KPI Grid 2x2 */}
+        <Text style={styles.sectionLabel}>TODAY'S OVERVIEW</Text>
+        <View style={styles.kpiGrid}>
+          <View style={styles.kpiRow}>
+            <KPICard
+              icon="cash-outline"
+              label="Today's Sales"
+              value={formatCurrency(0)}
+              change={0}
+              changeLabel="vs yesterday"
+            />
+            <KPICard
+              icon="time-outline"
+              label="Receivables"
+              value={formatCurrency(0)}
+            />
+          </View>
+          <View style={styles.kpiRow}>
+            <KPICard
+              icon="cube-outline"
+              label="Low Stock"
+              value={`${0} items`}
+            />
+            <KPICard
+              icon="grid-outline"
+              label="Total Records"
+              value={`${totalRecords}`}
+            />
+          </View>
+        </View>
+
+        {/* Quick Actions */}
+        <Text style={styles.sectionLabel}>QUICK ACTIONS</Text>
+        <View style={styles.actionsRow}>
+          {QUICK_ACTIONS.map(a => (
+            <TouchableOpacity
+              key={a.label}
+              style={styles.actionCard}
+              onPress={() => navigation.navigate('MainTabs', { screen: a.screen })}
+              activeOpacity={0.75}
+            >
+              <Ionicons name={a.icon} size={24} color={Theme.primary} />
+              <Text style={styles.actionLabel}>{a.label}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+
+        {/* Tables Summary */}
+        <Text style={styles.sectionLabel}>YOUR TABLES ({tables.length})</Text>
+        {tables.length === 0 ? (
+          <View style={styles.emptyBox}>
+            <Ionicons name="grid-outline" size={32} color={Theme.textDim} />
+            <Text style={styles.emptyText}>No tables yet. Tap Tables below to create one.</Text>
+          </View>
+        ) : (
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.tableScrollContent}
+          >
+            {tables.slice(0, 6).map((t: any) => (
+              <TouchableOpacity
+                key={t.id}
+                style={styles.tablePill}
+                onPress={() => navigation.navigate('TableDetail', { table: t })}
+              >
+                <Text style={styles.tablePillIcon}>{t.icon || '📋'}</Text>
+                <Text style={styles.tablePillName} numberOfLines={1}>{t.name}</Text>
+                <Text style={styles.tablePillCount}>{t.recordCount || 0}</Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        )}
+
+        {/* Recent Activity */}
+        <Text style={styles.sectionLabel}>RECENT ACTIVITY</Text>
+        {recentActivity.length === 0 ? (
+          <View style={styles.emptyBox}>
+            <Ionicons name="pulse-outline" size={32} color={Theme.textDim} />
+            <Text style={styles.emptyText}>No activity yet. Start adding records!</Text>
+          </View>
+        ) : (
+          <View style={styles.activityList}>
+            {recentActivity.map((a: any, i: number) => (
+              <View key={i} style={styles.activityRow}>
+                <View style={styles.activityDot} />
+                <View style={styles.activityBody}>
+                  <Text style={styles.activityAction}>{a.action}</Text>
+                  {a.details ? (
+                    <Text style={styles.activityDetails} numberOfLines={1}>{a.details}</Text>
+                  ) : null}
+                </View>
+                <Text style={styles.activityTime}>{formatRelativeTime(a.createdAt)}</Text>
+              </View>
+            ))}
+          </View>
+        )}
+
+        <View style={{ height: Spacing.xxl }} />
+      </ScrollView>
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  root: { flex: 1, backgroundColor: Theme.background },
+
+  // Header strip
+  headerWrap: { height: 120, overflow: 'hidden' },
+  headerStrip: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, width: '100%', height: '100%' },
+  headerOverlay: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(12,11,9,0.62)' },
+  headerContent: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
+    paddingHorizontal: Spacing.lg,
+    paddingBottom: Spacing.lg,
+  },
+  headerLeft: { flex: 1, marginRight: Spacing.md },
+  greeting: { ...Typography.headingL, color: Colors.ivory, marginBottom: 2 },
+  tagline: { ...Typography.bodyS, color: 'rgba(250,248,243,0.72)' },
+
+  // Scroll
+  scroll: { flex: 1 },
+
+  // Section labels
+  sectionLabel: {
+    ...Typography.labelCaps,
+    color: Theme.textSecondary,
+    paddingHorizontal: Spacing.lg,
+    marginTop: Spacing.xl,
+    marginBottom: Spacing.sm,
+  },
+
+  // KPI grid
+  kpiGrid: { paddingHorizontal: Spacing.sm },
+  kpiRow: { flexDirection: 'row' },
+
+  // Quick actions
+  actionsRow: {
+    flexDirection: 'row',
+    paddingHorizontal: Spacing.lg,
+    gap: Spacing.md,
+  },
+  actionCard: {
+    flex: 1,
+    backgroundColor: Theme.surface,
+    borderRadius: Radius.lg,
+    padding: Spacing.lg,
+    alignItems: 'center',
+    gap: Spacing.xs,
+    borderWidth: 1,
+    borderColor: Theme.border,
+  },
+  actionLabel: {
+    ...Typography.label,
+    color: Theme.textPrimary,
+    textAlign: 'center',
+  },
+
+  // Tables scroll
+  tableScrollContent: {
+    paddingHorizontal: Spacing.lg,
+    gap: Spacing.sm,
+    flexDirection: 'row',
+  },
+  tablePill: {
+    backgroundColor: Theme.surface,
+    borderRadius: Radius.lg,
+    padding: Spacing.md,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: Theme.border,
+    minWidth: 88,
+  },
+  tablePillIcon: { fontSize: 22, marginBottom: 4 },
+  tablePillName: { ...Typography.label, color: Theme.textPrimary, textAlign: 'center', marginBottom: 2 },
+  tablePillCount: { ...Typography.mono, color: Theme.primary },
+
+  // Empty state
+  emptyBox: {
+    alignItems: 'center',
+    padding: Spacing.xxl,
+    gap: Spacing.sm,
+    marginHorizontal: Spacing.lg,
+    backgroundColor: Theme.surface,
+    borderRadius: Radius.lg,
+    borderWidth: 1,
+    borderColor: Theme.border,
+  },
+  emptyText: { ...Typography.bodyM, color: Theme.textSecondary, textAlign: 'center' },
+
+  // Activity
+  activityList: {
+    marginHorizontal: Spacing.lg,
+    backgroundColor: Theme.surface,
+    borderRadius: Radius.lg,
+    borderWidth: 1,
+    borderColor: Theme.border,
+    overflow: 'hidden',
+  },
+  activityRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.md,
+    gap: Spacing.md,
+    borderBottomWidth: 1,
+    borderBottomColor: Theme.border,
+  },
+  activityDot: {
+    width: 8, height: 8, borderRadius: 4,
+    backgroundColor: Theme.primary, marginTop: 6,
+  },
+  activityBody: { flex: 1 },
+  activityAction: {
+    ...Typography.bodyM,
+    color: Theme.textPrimary,
+    fontFamily: 'DMSans_500Medium',
+  },
+  activityDetails: { ...Typography.bodyS, color: Theme.textSecondary },
+  activityTime: { ...Typography.bodyS, color: Theme.textDim },
+});

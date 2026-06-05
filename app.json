@@ -1,30 +1,34 @@
 {
   "expo": {
-    "name": "launchedge",
-    "slug": "launchedge",
+    "name": "LaunchEdge Labs",
+    "slug": "launchedge-labs",
     "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "orientation": "default",
+    "icon": "./assets/logo.png",
     "userInterfaceStyle": "light",
-    "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#FAF8F3"
     },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.launchedgelabs.app"
     },
     "android": {
+      "package": "com.launchedgelabs.app",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
-      "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+        "backgroundColor": "#C4963A"
+      }
     },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    }
+    "plugins": [
+      "expo-camera",
+      "expo-sqlite",
+      "expo-system-ui"
+    ]
   }
 }

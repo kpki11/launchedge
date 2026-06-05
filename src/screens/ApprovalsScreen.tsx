@@ -1,0 +1,324 @@
+﻿// src/screens/ApprovalsScreen.tsx
+// Tagline: "Nothing goes in without your say."
+// ? FIXED: Added missing Modal and TextInput to react-native imports
+import React, { useEffect, useState, useRef } from 'react';
+import * as Haptics from 'expo-haptics';
+import {
+  View, Text, StyleSheet, FlatList, TouchableOpacity,
+  RefreshControl, Alert, Modal, TextInput, Animated,
+} from 'react-native';
+import Reanimated, { FadeInDown } from 'react-native-reanimated';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
+import { Theme, Colors } from '../theme/colors';
+import { EmptyStateIllustration } from '../components/EmptyStateIllustration';
+import { TutorialToggleButton, Hintable } from '../components/TutorialOverlay';
+import { Typography, Spacing, Radius } from '../theme/typography';
+import { ApprovalCard } from '../components/ApprovalCard';
+import { useApprovalStore } from '../store/useApprovalStore';
+import { useBusinessStore } from '../store/useBusinessStore';
+import { ParticleField, GlowOrb } from '../components/ParticleField';
+import { formatRelativeTime } from '../utils/formatters';
+
+const TABS = ['Pending', 'Approved', 'Rejected'];
+
+export default function ApprovalsScreen({ navigation }: any) {
+  const { activeBusiness } = useBusinessStore();
+  const { pendingApprovals, pendingCount, loadApprovals, approve, reject } = useApprovalStore();
+  const [activeTab, setActiveTab] = useState('Pending');
+  const [refreshing, setRefreshing] = useState(false);
+  const [rejectModal, setRejectModal] = useState(false);
+  const [rejectNote, setRejectNote] = useState('');
+  const [rejectingId, setRejectingId] = useState<string | null>(null);
+
+  // Animation hooks
+  const headerAnim = useRef({ opacity: new Animated.Value(0), translateY: new Animated.Value(-16) }).current;
+  const tabAnim    = useRef(new Animated.Value(0)).current;
+  const listAnim   = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.parallel([
+      Animated.timing(headerAnim.opacity,    { toValue: 1, duration: 380, useNativeDriver: true }),
+      Animated.timing(headerAnim.translateY, { toValue: 0, duration: 380, useNativeDriver: true }),
+      Animated.timing(tabAnim,               { toValue: 1, duration: 400, delay: 80, useNativeDriver: true }),
+      Animated.timing(listAnim,              { toValue: 1, duration: 400, delay: 160, useNativeDriver: true }),
+    ]).start();
+  }, []);
+
+
+  useEffect(() => {
+    if (activeBusiness?.id) {
+      loadApprovals(activeBusiness.id);
+    }
+  }, [activeBusiness?.id]);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    if (activeBusiness?.id) await loadApprovals(activeBusiness.id);
+    setRefreshing(false);
+  };
+
+  const handleApprove = (id: string) => {
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    Alert.alert(
+      'Approve Record',
+      'Are you sure you want to approve this change?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Approve',
+          onPress: async () => {
+            await approve(id, activeBusiness?.name || 'Owner');
+            if (activeBusiness?.id) loadApprovals(activeBusiness.id);
+          },
+        },
+      ]
+    );
+  };
+
+  const handleRejectPress = (id: string) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    setRejectingId(id);
+    setRejectNote('');
+    setRejectModal(true);
+  };
+
+  const confirmReject = async () => {
+    if (!rejectingId) return;
+    await reject(rejectingId, activeBusiness?.name || 'Owner', rejectNote);
+    setRejectModal(false);
+    if (activeBusiness?.id) loadApprovals(activeBusiness.id);
+  };
+
+  const filteredItems = pendingApprovals.filter((a: any) => {
+    if (activeTab === 'Pending') return a.status === 'pending';
+    if (activeTab === 'Approved') return a.status === 'approved';
+    if (activeTab === 'Rejected') return a.status === 'rejected';
+    return true;
+  });
+
+  return (
+    <SafeAreaView style={styles.root} edges={['top']}>
+      {/* Background particles */}
+      <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} pointerEvents="none">
+        <ParticleField variant="full" count={14} height={1200} />
+        <GlowOrb x={-30} y={100} size={180} color="rgba(196,150,58,0.09)" />
+        <GlowOrb x={210} y={500} size={150} color="rgba(196,150,58,0.08)" />
+      </View>
+      {/* Header */}
+      <Animated.View style={[styles.header, { opacity: headerAnim.opacity, transform: [{ translateY: headerAnim.translateY }] }]}>
+        <View style={styles.headerLeft}>
+          <Text style={styles.title}>Approvals</Text>
+          <Text style={styles.tagline}>Nothing goes in without your say.</Text>
+        </View>
+        {pendingCount > 0 && (
+          <View style={styles.badgeWrap}>
+            <Text style={styles.badgeText}>{pendingCount}</Text>
+          </View>
+        )}
+      </Animated.View>
+
+      {/* Tab bar */}
+      <Animated.View style={[styles.tabBar, { opacity: tabAnim }]}>
+        {TABS.map(tab => (
+          <TouchableOpacity
+            key={tab}
+            style={[styles.tabBtn, activeTab === tab && styles.tabBtnActive]}
+            onPress={() => setActiveTab(tab)}
+          >
+            <Text style={[styles.tabText, activeTab === tab && styles.tabTextActive]}>
+              {tab}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </Animated.View>
+
+      <Animated.View style={{ opacity: listAnim, flex: 1 }}>
+      {filteredItems.length === 0 ? (
+        <View style={styles.emptyState}>
+          <Ionicons name="checkmark-circle-outline" size={64} color={Theme.primary} />
+          <Text style={styles.emptyDesc}>
+            {activeTab === 'Pending'
+              ? 'No pending approvals right now.\nNew submissions will appear here.'
+              : `No ${activeTab.toLowerCase()} items yet.`}
+          </Text>
+        </View>
+      ) : (
+        <FlatList
+          data={filteredItems}
+          keyExtractor={(item: any) => item.id}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={Theme.primary} />
+          }
+          contentContainerStyle={styles.list}
+          renderItem={({ item, index }: any) => (
+            <Reanimated.View entering={FadeInDown.delay(index * 70).springify().damping(16).stiffness(140)}>
+            <Hintable hintId="approval_card">
+            <ApprovalCard
+              id={item.id}
+              tableName={item.tableName || 'Unknown Table'}
+              changeType={item.changeType || 'create'}
+              requestedBy={item.requestedBy || 'Unknown'}
+              timeAgo={formatRelativeTime(item.createdAt)}
+              preview={(() => {
+                try {
+                  const data = JSON.parse(item.newData || '{}');
+                  const entries = Object.entries(data).slice(0, 2);
+                  return entries.map(([k, v]) => `${k}: ${v}`).join(' · ') || 'No preview';
+                } catch { return 'No preview'; }
+              })()}
+              onApprove={() => handleApprove(item.id)}
+              onReject={() => handleRejectPress(item.id)}
+            />
+            </Hintable>
+            </Reanimated.View>
+          )}
+          ItemSeparatorComponent={() => <View style={{ height: Spacing.sm }} />}
+        />
+      )}
+
+      {/* Reject note modal */}
+      <Modal visible={rejectModal} transparent animationType="slide">
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalCard}>
+            <Text style={styles.modalTitle}>Reject Record</Text>
+            <Text style={styles.modalDesc}>Add a note explaining the rejection (optional):</Text>
+            <TextInput
+              style={styles.modalInput}
+              value={rejectNote}
+              onChangeText={setRejectNote}
+              placeholder="e.g. Incorrect amount, please resubmit"
+              placeholderTextColor={Theme.textDim}
+              multiline
+              numberOfLines={3}
+            />
+            <View style={styles.modalActions}>
+              <TouchableOpacity
+                style={styles.cancelBtn}
+                onPress={() => setRejectModal(false)}
+              >
+                <Text style={styles.cancelBtnText}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.rejectConfirmBtn} onPress={confirmReject}>
+                <Text style={styles.rejectConfirmText}>Reject</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+      </Animated.View>
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  root: { flex: 1, backgroundColor: Theme.background },
+
+  header: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    paddingHorizontal: Spacing.lg,
+    paddingTop: Spacing.lg,
+    paddingBottom: Spacing.md,
+    borderBottomWidth: 1,
+    borderBottomColor: Theme.border,
+  },
+  headerLeft: { flex: 1 },
+  title: { ...Typography.displayM, color: Theme.textPrimary },
+  tagline: { ...Typography.bodyS, color: Theme.textSecondary },
+  badgeWrap: {
+    backgroundColor: Theme.danger,
+    borderRadius: Radius.full,
+    minWidth: 26, height: 26,
+    justifyContent: 'center', alignItems: 'center',
+    paddingHorizontal: 6,
+  },
+  badgeText: { ...Typography.label, color: Colors.ivory, fontSize: 12 },
+
+  tabBar: {
+    flexDirection: 'row',
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.sm,
+    gap: Spacing.sm,
+    borderBottomWidth: 1,
+    borderBottomColor: Theme.border,
+  },
+  tabBtn: {
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+    borderRadius: Radius.full,
+    borderWidth: 1,
+    borderColor: Theme.border,
+    backgroundColor: Theme.surface,
+  },
+  tabBtnActive: { backgroundColor: Theme.primary, borderColor: Theme.primary },
+  tabText: { ...Typography.label, color: Theme.textSecondary },
+  tabTextActive: { color: Colors.ivory },
+
+  list: { padding: Spacing.lg, paddingTop: Spacing.md },
+
+  emptyState: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: Spacing.xxl,
+    gap: Spacing.md,
+  },
+  emptyTitle: { ...Typography.headingL, color: Theme.textPrimary },
+  emptyDesc: {
+    ...Typography.bodyM,
+    color: Theme.textSecondary,
+    textAlign: 'center',
+    lineHeight: 22,
+  },
+
+  // Modal
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(12,11,9,0.55)',
+    justifyContent: 'flex-end',
+  },
+  modalCard: {
+    backgroundColor: Theme.background,
+    borderTopLeftRadius: Radius.xl,
+    borderTopRightRadius: Radius.xl,
+    padding: Spacing.xl,
+    paddingBottom: Spacing.xxxl,
+  },
+  modalTitle: { ...Typography.headingL, color: Theme.textPrimary, marginBottom: 4 },
+  modalDesc: { ...Typography.bodyM, color: Theme.textSecondary, marginBottom: Spacing.md },
+  modalInput: {
+    ...Typography.bodyM,
+    borderWidth: 1,
+    borderColor: Theme.border,
+    borderRadius: Radius.md,
+    padding: Spacing.md,
+    backgroundColor: Theme.surface,
+    color: Theme.textPrimary,
+    minHeight: 80,
+    textAlignVertical: 'top',
+    marginBottom: Spacing.lg,
+  },
+  modalActions: { flexDirection: 'row', gap: Spacing.md },
+  cancelBtn: {
+    flex: 1,
+    paddingVertical: Spacing.md,
+    borderRadius: Radius.md,
+    borderWidth: 1,
+    borderColor: Theme.border,
+    alignItems: 'center',
+  },
+  cancelBtnText: { ...Typography.label, color: Theme.textSecondary },
+  rejectConfirmBtn: {
+    flex: 1,
+    paddingVertical: Spacing.md,
+    borderRadius: Radius.md,
+    backgroundColor: Theme.danger,
+    alignItems: 'center',
+  },
+  rejectConfirmText: { ...Typography.label, color: Colors.ivory },
+});
+
+
+
